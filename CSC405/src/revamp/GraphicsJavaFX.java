@@ -10,6 +10,8 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
@@ -40,7 +42,7 @@ public class GraphicsJavaFX extends Application
     {
         this.mainStage = mainStage;
     	// -- Application title
-        mainStage.setTitle("Assignment 3 Java FX");
+        mainStage.setTitle("Assignment 4 Java FX");
         // -- create canvas for drawing
         graphicsCanvas = new GraphicsCanvasInner(WIDTH, HEIGHT);
     	// -- construct the controls
@@ -154,10 +156,20 @@ public class GraphicsJavaFX extends Application
     
     // -- Inner class for Controls
     public class ControlBoxInner extends VBox {
-        private Button Create_Box;
-        //private Button bresen_Test;
+        private Button render;
+        private Button translate;
+        private Button scale;
+
+        private Button rotateX;
+        private Button rotateY;
+        private Button rotateZ;
+
+        private Button reset;
         private Button savePNG;
 
+        private TextField point;
+        private TextField scale_amt;
+        private TextField degree;
         private FileChooser fileChooser;
 
         public ControlBoxInner()
@@ -167,20 +179,45 @@ public class GraphicsJavaFX extends Application
             fileChooser = new FileChooser();
             FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Image Files", ".png");
             fileChooser.getExtensionFilters().add(extFilter);
+            point = new TextField("0,0,0");
+            point.setMaxWidth(100);
+            scale_amt = new TextField("0,0,0");
+            scale_amt.setMaxWidth(100);
+            degree = new TextField("0");
+            degree.setMaxWidth(50);
 
             // -- set up buttons
+            //this.setSpacing(5);
             prepareButtonHandlers();
-            this.getChildren().add(Create_Box);
-            //this.getChildren().add(bresen_Test);
+            this.getChildren().add(new Label(" Refresh Scene:"));
+            this.getChildren().add(render);
+            this.getChildren().add(new Label(" "));
+            this.getChildren().add(new Label(" Edit Scene:"));
+            this.getChildren().add(translate);
+            //this.getChildren().add(new Label("(x, y, z)"));
+            this.getChildren().add(point);
+            this.getChildren().add(new Label(" "));
+            this.getChildren().add(scale);
+           // this.getChildren().add(new Label("(x, y, z)"));
+            this.getChildren().add(scale_amt);
+            this.getChildren().add(new Label(" "));
+            this.getChildren().add(rotateX);
+            this.getChildren().add(rotateY);
+            this.getChildren().add(rotateZ);
+           // this.getChildren().add(new Label("(Degrees)"));
+            this.getChildren().add(degree);
+            this.getChildren().add(new Label(" "));
+            this.getChildren().add(new Label(" Misc:"));
+            this.getChildren().add(reset);
             this.getChildren().add(savePNG);
         }
 
         private void prepareButtonHandlers()
         {
-            // Box
-            Create_Box = new Button();
-            Create_Box.setText("Scene");
-            Create_Box.setOnAction(new EventHandler<ActionEvent>() {
+            // graphic
+            render = new Button();
+            render.setText("Scene");
+            render.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent actionEvent) {
                     // -- process the button
@@ -191,20 +228,86 @@ public class GraphicsJavaFX extends Application
                     pane.requestFocus();
                 }
             });
-//            // bresen test
-//            bresen_Test = new Button();
-//            bresen_Test.setText("Bresenham Test");
-//            bresen_Test.setOnAction(new EventHandler<ActionEvent>() {
-//                @Override
-//                public void handle(ActionEvent actionEvent) {
-//                    // -- process the button
-//                    graphicsCanvas.renderSurface.clear();
-//                    Line.star(graphicsCanvas.renderSurface.getSurface());
-//                    graphicsCanvas.repaint();
-//                    // -- and return focus back to the pane
-//                    pane.requestFocus();
-//                }
-//            });
+
+            // translate
+            translate = new Button();
+            translate.setText("Translate");
+            translate.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent actionEvent) {
+                    // -- process the button
+                    graph.fixedPoint = convertToPoint(point);
+                    MatrixOp.translate(graph, convertToPoint(point));
+                    // -- and return focus back to the pane
+                    pane.requestFocus();
+                }
+            });
+
+            // scale
+            scale = new Button();
+            scale.setText("Scale");
+            scale.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent actionEvent) {
+                    // -- process the button
+
+                    MatrixOp.scale(graph, convertToPoint(scale_amt));
+                    // -- and return focus back to the pane
+                    pane.requestFocus();
+                }
+            });
+
+            // rotate X
+            rotateX = new Button();
+            rotateX.setText("Rotate X");
+            rotateX.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent actionEvent) {
+                    // -- process the button
+                    MatrixOp.rotateXInPlace(graph, Double.parseDouble(degree.getText()));
+                    // -- and return focus back to the pane
+                    pane.requestFocus();
+                }
+            });
+
+            // rotate Y
+            rotateY = new Button();
+            rotateY.setText("Rotate Y");
+            rotateY.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent actionEvent) {
+                    // -- process the button
+                    MatrixOp.rotateYInPlace(graph, Double.parseDouble(degree.getText()));
+                    // -- and return focus back to the pane
+                    pane.requestFocus();
+                }
+            });
+
+            // rotate X
+            rotateZ = new Button();
+            rotateZ.setText("Rotate Z");
+            rotateZ.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent actionEvent) {
+                    // -- process the button
+                    MatrixOp.rotateZInPlace(graph, Double.parseDouble(degree.getText()));
+                    // -- and return focus back to the pane
+                    pane.requestFocus();
+                }
+            });
+
+            // Reset
+            reset = new Button();
+            reset.setText("Reset");
+            reset.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent actionEvent) {
+                    // -- process the button
+                    graph.reset();
+                    // -- and return focus back to the pane
+                    pane.requestFocus();
+                }
+            });
             //Save As PNG
             savePNG = new Button();
             savePNG.setText("Save as PNG");
@@ -227,6 +330,16 @@ public class GraphicsJavaFX extends Application
                 }
             });
         	}
+        	private double[] convertToPoint(TextField text)
+            {
+                double[] result = new double[3];
+                String[] textBox = text.getText().split(",");
+                for(int i = 0; i < result.length; i++)
+                {
+                    result[i] = Double.parseDouble(textBox[i]);
+                }
+                return result;
+            }
         }
     }
 

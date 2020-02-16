@@ -7,6 +7,13 @@
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
@@ -20,6 +27,40 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
   </component>
+  <component name="RunManager" selected="Application.MainAppJavaFX">
+    <configuration name="GraphicsJavaFX" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="revamp.GraphicsJavaFX" />
+      <module name="CSC405" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="revamp.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="MainAppJavaFX" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="revamp.MainAppJavaFX" />
+      <module name="CSC405" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="revamp.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.MainAppJavaFX" />
+        <item itemvalue="Application.GraphicsJavaFX" />
+      </list>
+    </recent_temporary>
+  </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
       <changelist id="e3c144cc-c1bf-46a9-99ee-4b1bf53c396d" name="Default Changelist" comment="" />
@@ -31,9 +72,39 @@
     <servers />
   </component>
   <component name="WindowStateProjectService">
-    <state x="496" y="258" key="com.intellij.ide.util.TipDialog" timestamp="1581611165683">
+    <state width="1431" height="2" key="GridCell.Tab.0.bottom" timestamp="1581890604740">
       <screen x="62" y="0" width="1474" height="864" />
     </state>
+    <state width="1815" height="224" key="GridCell.Tab.0.bottom/62.0.1474.864/-1858.0.1858.1080@-1858.0.1858.1080" timestamp="1581639406814" />
+    <state width="1431" height="2" key="GridCell.Tab.0.bottom/62.0.1474.864/-1858.0.1858.1080@62.0.1474.864" timestamp="1581890604740" />
+    <state width="1431" height="224" key="GridCell.Tab.0.bottom/62.0.1474.864@62.0.1474.864" timestamp="1581637806464" />
+    <state width="1431" height="2" key="GridCell.Tab.0.center" timestamp="1581890604739">
+      <screen x="62" y="0" width="1474" height="864" />
+    </state>
+    <state width="1815" height="224" key="GridCell.Tab.0.center/62.0.1474.864/-1858.0.1858.1080@-1858.0.1858.1080" timestamp="1581639406814" />
+    <state width="1431" height="2" key="GridCell.Tab.0.center/62.0.1474.864/-1858.0.1858.1080@62.0.1474.864" timestamp="1581890604739" />
+    <state width="1431" height="224" key="GridCell.Tab.0.center/62.0.1474.864@62.0.1474.864" timestamp="1581637806464" />
+    <state width="1431" height="2" key="GridCell.Tab.0.left" timestamp="1581890604739">
+      <screen x="62" y="0" width="1474" height="864" />
+    </state>
+    <state width="1815" height="224" key="GridCell.Tab.0.left/62.0.1474.864/-1858.0.1858.1080@-1858.0.1858.1080" timestamp="1581639406814" />
+    <state width="1431" height="2" key="GridCell.Tab.0.left/62.0.1474.864/-1858.0.1858.1080@62.0.1474.864" timestamp="1581890604739" />
+    <state width="1431" height="224" key="GridCell.Tab.0.left/62.0.1474.864@62.0.1474.864" timestamp="1581637806463" />
+    <state width="1431" height="2" key="GridCell.Tab.0.right" timestamp="1581890604739">
+      <screen x="62" y="0" width="1474" height="864" />
+    </state>
+    <state width="1815" height="224" key="GridCell.Tab.0.right/62.0.1474.864/-1858.0.1858.1080@-1858.0.1858.1080" timestamp="1581639406814" />
+    <state width="1431" height="2" key="GridCell.Tab.0.right/62.0.1474.864/-1858.0.1858.1080@62.0.1474.864" timestamp="1581890604739" />
+    <state width="1431" height="224" key="GridCell.Tab.0.right/62.0.1474.864@62.0.1474.864" timestamp="1581637806464" />
+    <state x="496" y="258" key="com.intellij.ide.util.TipDialog" timestamp="1581881494352">
+      <screen x="62" y="0" width="1474" height="864" />
+    </state>
+    <state x="496" y="258" key="com.intellij.ide.util.TipDialog/62.0.1474.864/-1858.0.1858.1080@62.0.1474.864" timestamp="1581881494352" />
     <state x="496" y="258" key="com.intellij.ide.util.TipDialog/62.0.1474.864@62.0.1474.864" timestamp="1581611165683" />
+    <state x="462" y="181" width="672" height="678" key="search.everywhere.popup" timestamp="1581885301367">
+      <screen x="62" y="0" width="1474" height="864" />
+    </state>
+    <state x="462" y="181" width="672" height="678" key="search.everywhere.popup/62.0.1474.864/-1858.0.1858.1080@62.0.1474.864" timestamp="1581885301367" />
+    <state x="462" y="181" width="672" height="678" key="search.everywhere.popup/62.0.1474.864@62.0.1474.864" timestamp="1581637933949" />
   </component>
 </project>

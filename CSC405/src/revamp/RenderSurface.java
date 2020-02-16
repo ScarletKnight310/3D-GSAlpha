@@ -14,11 +14,11 @@ public class RenderSurface extends WritableImage {
 		super(width, height);
 		surface = new int[height][width];
 
-		for (int i = 0; i < height; ++i) {
-			for (int j = 0; j < width; ++j) {
-				surface[i][j] = (int)(Math.random() * 255);
-			}
-		}
+//		for (int i = 0; i < height; ++i) {
+//			for (int j = 0; j < width; ++j) {
+//				surface[i][j] = (int)(Math.random() * 255);
+//			}
+//		}
 		insertArray();
 	}
 	

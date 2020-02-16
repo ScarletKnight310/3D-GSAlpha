@@ -21,7 +21,11 @@ public class Line
         }
     }
 
-    //
+    public static void drawLine(double x0, double y0, double x1, double y1, int[][] framebuffer)
+    {
+        drawLine((int) x0,(int) y0,(int) x1, (int) y1,framebuffer);
+    }
+
     private static void plotLineLow(int x0, int y0, int x1, int y1,  int[][] framebuffer)
     {
         // delta x and y
@@ -90,15 +94,4 @@ public class Line
             y++;
         }
     }
-
-    // Bresenham def
-//    public static void star(int[][] framebuffer)
-//    {
-//        for (int x = 0; x < framebuffer[0].length; x += 13) {
-//            drawLine(x, 0, framebuffer[0].length - x - 1, framebuffer.length - 1, framebuffer);
-//        }
-//        for (int y = 0; y < framebuffer.length; y += 13) {
-//            drawLine(0, y, framebuffer[0].length - 1, framebuffer.length - y - 1, framebuffer);
-//        }
-//    }
 }
