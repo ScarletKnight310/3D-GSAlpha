@@ -1,4 +1,4 @@
-package revamp;
+package revamp.base;
 
 import java.awt.image.BufferedImage;
 import javafx.scene.image.PixelWriter;

@@ -1,9 +1,13 @@
-package revamp;
+package revamp.operations;
 
+import revamp.base.SceneGraph;
 import java.util.function.BiConsumer;
+
 
 public class MatrixOp
 {
+    private static double[][] workspace;
+
     // Speci Functions
     public static void translate(SceneGraph graph, double[] point)
     {
@@ -25,13 +29,13 @@ public class MatrixOp
                         {0.0,0.0,0.0,1.0}});
     }
 
-    public static void rotateX(SceneGraph graph, double degree)
+    public static void rotateX(SceneGraph graph, double degreeN)
     {
         Operation(graph,
                 new double[][]{
                         {1, 0, 0, 0},
-                        {0, Math.cos(Math.toRadians(degree)), -Math.sin(Math.toRadians(degree)), 0},
-                        {0, Math.sin(Math.toRadians(degree)), Math.cos(Math.toRadians(degree)), 0},
+                        {0, Math.cos(Math.toRadians(degreeN)), -Math.sin(Math.toRadians(degreeN)), 0},
+                        {0, Math.sin(Math.toRadians(degreeN)), Math.cos(Math.toRadians(degreeN)), 0},
                         {0, 0, 0, 1}});
     }
 
@@ -73,7 +77,7 @@ public class MatrixOp
     // GENERAL functions
     private static void rotateInPlace(SceneGraph graph, double degree, BiConsumer<SceneGraph,Double> rotate)
     {
-        // to origin
+        //  to origin
         translate(graph,new double[] {-graph.fixedPoint[0],-graph.fixedPoint[1],-graph.fixedPoint[2]});
         // rotate
         rotate.accept(graph,degree);

@@ -27,13 +27,18 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
   </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\k1aar\OneDrive\Desktop\Projects\Java\3D-Graphics-System\CSC405\src\revamp\base" />
+    </key>
+  </component>
   <component name="RunManager" selected="Application.MainAppJavaFX">
     <configuration name="GraphicsJavaFX" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="revamp.GraphicsJavaFX" />
+      <option name="MAIN_CLASS_NAME" value="revamp.app.GraphicsJavaFX" />
       <module name="CSC405" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="revamp.*" />
+          <option name="PATTERN" value="revamp.app.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -42,11 +47,11 @@
       </method>
     </configuration>
     <configuration name="MainAppJavaFX" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="revamp.MainAppJavaFX" />
+      <option name="MAIN_CLASS_NAME" value="revamp.app.MainAppJavaFX" />
       <module name="CSC405" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="revamp.*" />
+          <option name="PATTERN" value="revamp.app.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -72,39 +77,39 @@
     <servers />
   </component>
   <component name="WindowStateProjectService">
-    <state width="1431" height="2" key="GridCell.Tab.0.bottom" timestamp="1581890604740">
+    <state width="1431" height="2" key="GridCell.Tab.0.bottom" timestamp="1582847412035">
       <screen x="62" y="0" width="1474" height="864" />
     </state>
     <state width="1815" height="224" key="GridCell.Tab.0.bottom/62.0.1474.864/-1858.0.1858.1080@-1858.0.1858.1080" timestamp="1581639406814" />
     <state width="1431" height="2" key="GridCell.Tab.0.bottom/62.0.1474.864/-1858.0.1858.1080@62.0.1474.864" timestamp="1581890604740" />
-    <state width="1431" height="224" key="GridCell.Tab.0.bottom/62.0.1474.864@62.0.1474.864" timestamp="1581637806464" />
-    <state width="1431" height="2" key="GridCell.Tab.0.center" timestamp="1581890604739">
+    <state width="1431" height="2" key="GridCell.Tab.0.bottom/62.0.1474.864@62.0.1474.864" timestamp="1582847412035" />
+    <state width="1431" height="2" key="GridCell.Tab.0.center" timestamp="1582847412035">
       <screen x="62" y="0" width="1474" height="864" />
     </state>
     <state width="1815" height="224" key="GridCell.Tab.0.center/62.0.1474.864/-1858.0.1858.1080@-1858.0.1858.1080" timestamp="1581639406814" />
     <state width="1431" height="2" key="GridCell.Tab.0.center/62.0.1474.864/-1858.0.1858.1080@62.0.1474.864" timestamp="1581890604739" />
-    <state width="1431" height="224" key="GridCell.Tab.0.center/62.0.1474.864@62.0.1474.864" timestamp="1581637806464" />
-    <state width="1431" height="2" key="GridCell.Tab.0.left" timestamp="1581890604739">
+    <state width="1431" height="2" key="GridCell.Tab.0.center/62.0.1474.864@62.0.1474.864" timestamp="1582847412035" />
+    <state width="1431" height="2" key="GridCell.Tab.0.left" timestamp="1582847412034">
       <screen x="62" y="0" width="1474" height="864" />
     </state>
     <state width="1815" height="224" key="GridCell.Tab.0.left/62.0.1474.864/-1858.0.1858.1080@-1858.0.1858.1080" timestamp="1581639406814" />
     <state width="1431" height="2" key="GridCell.Tab.0.left/62.0.1474.864/-1858.0.1858.1080@62.0.1474.864" timestamp="1581890604739" />
-    <state width="1431" height="224" key="GridCell.Tab.0.left/62.0.1474.864@62.0.1474.864" timestamp="1581637806463" />
-    <state width="1431" height="2" key="GridCell.Tab.0.right" timestamp="1581890604739">
+    <state width="1431" height="2" key="GridCell.Tab.0.left/62.0.1474.864@62.0.1474.864" timestamp="1582847412034" />
+    <state width="1431" height="2" key="GridCell.Tab.0.right" timestamp="1582847412035">
       <screen x="62" y="0" width="1474" height="864" />
     </state>
     <state width="1815" height="224" key="GridCell.Tab.0.right/62.0.1474.864/-1858.0.1858.1080@-1858.0.1858.1080" timestamp="1581639406814" />
     <state width="1431" height="2" key="GridCell.Tab.0.right/62.0.1474.864/-1858.0.1858.1080@62.0.1474.864" timestamp="1581890604739" />
-    <state width="1431" height="224" key="GridCell.Tab.0.right/62.0.1474.864@62.0.1474.864" timestamp="1581637806464" />
+    <state width="1431" height="2" key="GridCell.Tab.0.right/62.0.1474.864@62.0.1474.864" timestamp="1582847412035" />
     <state x="496" y="258" key="com.intellij.ide.util.TipDialog" timestamp="1581881494352">
       <screen x="62" y="0" width="1474" height="864" />
     </state>
     <state x="496" y="258" key="com.intellij.ide.util.TipDialog/62.0.1474.864/-1858.0.1858.1080@62.0.1474.864" timestamp="1581881494352" />
     <state x="496" y="258" key="com.intellij.ide.util.TipDialog/62.0.1474.864@62.0.1474.864" timestamp="1581611165683" />
-    <state x="462" y="181" width="672" height="678" key="search.everywhere.popup" timestamp="1581885301367">
+    <state x="462" y="181" width="672" height="678" key="search.everywhere.popup" timestamp="1582842318276">
       <screen x="62" y="0" width="1474" height="864" />
     </state>
     <state x="462" y="181" width="672" height="678" key="search.everywhere.popup/62.0.1474.864/-1858.0.1858.1080@62.0.1474.864" timestamp="1581885301367" />
-    <state x="462" y="181" width="672" height="678" key="search.everywhere.popup/62.0.1474.864@62.0.1474.864" timestamp="1581637933949" />
+    <state x="462" y="181" width="672" height="678" key="search.everywhere.popup/62.0.1474.864@62.0.1474.864" timestamp="1582842318276" />
   </component>
 </project>

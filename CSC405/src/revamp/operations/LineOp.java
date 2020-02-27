@@ -1,6 +1,6 @@
-package revamp;
+package revamp.operations;
 
-public class Line
+public class LineOp
 {
     /// Ref: Wikipedia - https://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm#Algorithm
     public static void drawLine(int x0, int y0, int x1, int y1, int[][] framebuffer)

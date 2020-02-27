@@ -1,8 +1,10 @@
-package revamp;
+package revamp.app;
 
 import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
+
+import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -21,6 +23,9 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import revamp.operations.MatrixOp;
+import revamp.base.RenderSurface;
+import revamp.base.SceneGraph;
 
 
 public class GraphicsJavaFX extends Application
@@ -36,23 +41,24 @@ public class GraphicsJavaFX extends Application
     ControlBoxInner controlBox;
     Stage mainStage;
     SceneGraph graph;
+    AnimationTimer animationTimer;
 
     @Override
     public void start(Stage mainStage)
     {
         this.mainStage = mainStage;
-    	// -- Application title
-        mainStage.setTitle("Assignment 4 Java FX");
+        // -- Application title
+        mainStage.setTitle("Assignment 5 Java FX");
         // -- create canvas for drawing
         graphicsCanvas = new GraphicsCanvasInner(WIDTH, HEIGHT);
-    	// -- construct the controls
-    	controlBox = new ControlBoxInner();
+        // -- construct the controls
+        controlBox = new ControlBoxInner();
         // -- create the primary window structure
         pane = new BorderPane();
-    	// -- add the graphics canvas and the control box to the split pan
+        // -- add the graphics canvas and the control box to the split pan
         pane.setLeft(controlBox);
         pane.setCenter(graphicsCanvas);
-        // -- set up key listeners (to Pane) 
+        // -- set up key listeners (to Pane)
         prepareActionHandlers(pane);
         mainScene = new Scene(pane);
         mainStage.setScene(mainScene);
@@ -73,7 +79,7 @@ public class GraphicsJavaFX extends Application
         container.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
-            	System.out.println(event.getCode().toString());
+                System.out.println(event.getCode().toString());
                 graphicsCanvas.repaint();
             }
         });
@@ -84,31 +90,31 @@ public class GraphicsJavaFX extends Application
             }
         });
     }
-    // -- launch the application 
+    // -- launch the application
     public void launchApp(String[] args)
     {
         launch(args);
     }
     // -- Inner class for Graphics
     public class GraphicsCanvasInner extends Canvas  {
-    	private GraphicsContext graphicsContext;
-    	private RenderSurface renderSurface;
+        private GraphicsContext graphicsContext;
+        private RenderSurface renderSurface;
 
-    	public GraphicsCanvasInner(int width, int height)
-    	{
-    		super(width, height);
+        public GraphicsCanvasInner(int width, int height)
+        {
+            super(width, height);
             // -- get the context for drawing on the canvas
             graphicsContext = this.getGraphicsContext2D();
             // -- set up event handlers for mouse
             prepareActionHandlers();
-        	renderSurface = new RenderSurface((int)width, (int)height);
-    	}
-    	// -- check the active keys and render graphics
+            renderSurface = new RenderSurface((int)width, (int)height);
+        }
+        // -- check the active keys and render graphics
         public void repaint()
         {
             graphicsCanvas.renderSurface.insertArray();
-        	double height = this.getHeight();
-        	double width = this.getWidth();
+            double height = this.getHeight();
+            double width = this.getWidth();
             // -- clear canvas
             graphicsContext.clearRect(0, 0, width, height);
             graphicsContext.setStroke(Color.RED);
@@ -121,39 +127,39 @@ public class GraphicsJavaFX extends Application
             this.setOnMousePressed(new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent event) {
-                	if (event.getButton() == MouseButton.PRIMARY) {
-                	}
-                	else if (event.getButton() == MouseButton.SECONDARY) {
-                	}
-                	pane.requestFocus();
+                    if (event.getButton() == MouseButton.PRIMARY) {
+                    }
+                    else if (event.getButton() == MouseButton.SECONDARY) {
+                    }
+                    pane.requestFocus();
                 }
             });
             this.setOnMouseReleased(new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent event) {
-                	if (event.getButton() == MouseButton.PRIMARY) {
-                 	}
-                	else if (event.getButton() == MouseButton.SECONDARY) {
-                	}
-                	pane.requestFocus();
-                	repaint();
+                    if (event.getButton() == MouseButton.PRIMARY) {
+                    }
+                    else if (event.getButton() == MouseButton.SECONDARY) {
+                    }
+                    pane.requestFocus();
+                    repaint();
                 }
             });
-        	this.setOnMouseDragged(new EventHandler<MouseEvent>() {
+            this.setOnMouseDragged(new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent event) {
-                	if (event.getButton() == MouseButton.PRIMARY) {
-                	}
-                	else if (event.getButton() == MouseButton.SECONDARY) {
-                	}
-                	pane.requestFocus();
-                	repaint();
+                    if (event.getButton() == MouseButton.PRIMARY) {
+                    }
+                    else if (event.getButton() == MouseButton.SECONDARY) {
+                    }
+                    pane.requestFocus();
+                    repaint();
                 }
             });
         }
     }
 
-    
+
     // -- Inner class for Controls
     public class ControlBoxInner extends VBox {
         private Button render;
@@ -165,10 +171,13 @@ public class GraphicsJavaFX extends Application
         private Button rotateZ;
 
         private Button reset;
+        private Button spin;
+        private boolean toggle = false;
         private Button savePNG;
 
         private TextField point;
         private TextField scale_amt;
+        // private TextField fixedPoint;
         private TextField degree;
         private FileChooser fileChooser;
 
@@ -179,12 +188,14 @@ public class GraphicsJavaFX extends Application
             fileChooser = new FileChooser();
             FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Image Files", ".png");
             fileChooser.getExtensionFilters().add(extFilter);
-            point = new TextField("0,0,0");
+            // fixedPoint = new TextField("0,0,0");
+            //fixedPoint.setMaxWidth(100);
+            point = new TextField("x,y,z");
             point.setMaxWidth(100);
-            scale_amt = new TextField("0,0,0");
+            scale_amt = new TextField("x,y,z");
             scale_amt.setMaxWidth(100);
-            degree = new TextField("0");
-            degree.setMaxWidth(50);
+            degree = new TextField("degrees");
+            degree.setMaxWidth(60);
 
             // -- set up buttons
             //this.setSpacing(5);
@@ -198,18 +209,29 @@ public class GraphicsJavaFX extends Application
             this.getChildren().add(point);
             this.getChildren().add(new Label(" "));
             this.getChildren().add(scale);
-           // this.getChildren().add(new Label("(x, y, z)"));
+            // this.getChildren().add(new Label("(x, y, z)"));
             this.getChildren().add(scale_amt);
             this.getChildren().add(new Label(" "));
             this.getChildren().add(rotateX);
             this.getChildren().add(rotateY);
             this.getChildren().add(rotateZ);
-           // this.getChildren().add(new Label("(Degrees)"));
+            // this.getChildren().add(new Label("(Degrees)"));
             this.getChildren().add(degree);
             this.getChildren().add(new Label(" "));
             this.getChildren().add(new Label(" Misc:"));
             this.getChildren().add(reset);
+            this.getChildren().add(spin);
             this.getChildren().add(savePNG);
+
+            animationTimer = new AnimationTimer() {
+                public void handle(long currentNanoTime) {
+                    graphicsCanvas.renderSurface.clear();
+                    MatrixOp.rotateZInPlace(graph, Double.parseDouble(degree.getText()));
+                    graph.render(graphicsCanvas.renderSurface.getSurface());
+                    graphicsCanvas.repaint();
+                    pane.requestFocus();
+                }
+            };
         }
 
         private void prepareButtonHandlers()
@@ -238,6 +260,7 @@ public class GraphicsJavaFX extends Application
                     // -- process the button
                     graph.fixedPoint = convertToPoint(point);
                     MatrixOp.translate(graph, convertToPoint(point));
+                    //  fixedPoint.setText(graph.fixedPoint[0] +"," + graph.fixedPoint[1] +","+graph.fixedPoint[2]);
                     // -- and return focus back to the pane
                     pane.requestFocus();
                 }
@@ -250,8 +273,8 @@ public class GraphicsJavaFX extends Application
                 @Override
                 public void handle(ActionEvent actionEvent) {
                     // -- process the button
-
                     MatrixOp.scale(graph, convertToPoint(scale_amt));
+                    //   fixedPoint.setText(graph.fixedPoint[0] +"," + graph.fixedPoint[1] +","+graph.fixedPoint[2]);
                     // -- and return focus back to the pane
                     pane.requestFocus();
                 }
@@ -304,6 +327,30 @@ public class GraphicsJavaFX extends Application
                 public void handle(ActionEvent actionEvent) {
                     // -- process the button
                     graph.reset();
+                    //    fixedPoint.setText(graph.fixedPoint[0] +"," + graph.fixedPoint[1] +","+graph.fixedPoint[2]);
+                    // -- and return focus back to the pane
+                    pane.requestFocus();
+                }
+            });
+            // Spin
+            spin = new Button();
+            spin.setText("Spin It!");
+            spin.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent actionEvent) {
+                    // -- process the button
+                    toggle = !toggle;
+                    if(toggle)
+                    {
+                        graph.fixedPoint = new double[]{(WIDTH/2),(HEIGHT/2),0};
+                        MatrixOp.translate(graph,graph.fixedPoint);
+                        animationTimer.start();
+                    }
+                    else
+                    {
+                        animationTimer.stop();
+                        graph.reset();
+                    }
                     // -- and return focus back to the pane
                     pane.requestFocus();
                 }
@@ -329,17 +376,17 @@ public class GraphicsJavaFX extends Application
                     pane.requestFocus();
                 }
             });
-        	}
-        	private double[] convertToPoint(TextField text)
+        }
+        private double[] convertToPoint(TextField text)
+        {
+            double[] result = new double[3];
+            String[] textBox = text.getText().split(",");
+            for(int i = 0; i < result.length; i++)
             {
-                double[] result = new double[3];
-                String[] textBox = text.getText().split(",");
-                for(int i = 0; i < result.length; i++)
-                {
-                    result[i] = Double.parseDouble(textBox[i]);
-                }
-                return result;
+                result[i] = Double.parseDouble(textBox[i]);
             }
+            return result;
         }
     }
+}
 
