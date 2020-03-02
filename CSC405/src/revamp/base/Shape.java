@@ -4,26 +4,59 @@ import revamp.operations.LineOp;
 
 public class Shape
 {
+    // WIP
     private Shape2D[] shape_full;
+    private Shape2D[] orig;
     private double[] fixed_point;
 
     public Shape()
     {
         shape_full = new Shape2D[] {
+                // Front
                 new Shape2D(new double[][] {
                         {-100, 100, 100, -100},
                         {-100, -100, 100, 100},
                         {100, 100, 100, 100},
                         {1, 1, 1, 1}
                 }),
+                // Back
                 new Shape2D(new double[][] {
                         {-100, 100, 100, -100},
                         {-100, -100, 100, 100},
                         {-100, -100, -100, -100},
                         {1, 1, 1, 1}
+                }),
+                // Top
+                new Shape2D(new double[][] {
+                        {-100, 100, 100, -100},
+                        {-100, -100, -100, -100},
+                        {-100, -100, 100, 100},
+                        {1, 1, 1, 1}
+                }),
+                // Bottom
+                new Shape2D(new double[][] {
+                        {-100, 100, 100, -100},
+                        {100, 100, 100, 100},
+                        {-100, -100, 100, 100},
+                        {1, 1, 1, 1}
+                }),
+                // Left
+                new Shape2D(new double[][] {
+                        {-100, -100, -100, -100},
+                        {-100, -100, 100, 100},
+                        {-100, 100, 100, -100},
+                        {1, 1, 1, 1}
+                }),
+                // Right
+                new Shape2D(new double[][] {
+                        {100, 100, 100, 100},
+                        {-100, -100, 100, 100},
+                        {100, -100, -100, 100},
+                        {1, 1, 1, 1}
                 })
         };
         fixed_point = new double[]{0,0,0,1};
+        orig = shape_full;
     }
 
     public void render(int[][] framebuffer)

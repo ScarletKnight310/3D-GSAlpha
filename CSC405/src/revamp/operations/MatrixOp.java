@@ -6,7 +6,6 @@ import java.util.function.BiConsumer;
 
 public class MatrixOp
 {
-    private static double[][] workspace;
 
     // Speci Functions
     public static void translate(SceneGraph graph, double[] point)
@@ -41,28 +40,25 @@ public class MatrixOp
 
     public static void rotateXInPlace(SceneGraph graph, double degree)
     {
-        rotateInPlace(graph,degree,MatrixOp::rotateX);
+        rotateInPlace(graph,MatrixBase.rotateXM(degree));
     }
 
     public static void rotateYInPlace(SceneGraph graph, double degree)
     {
-        rotateInPlace(graph,degree,MatrixOp::rotateY);
+        rotateInPlace(graph,MatrixBase.rotateYM(degree));
     }
 
     public static void rotateZInPlace(SceneGraph graph, double degree)
     {
-        rotateInPlace(graph,degree,MatrixOp::rotateZ);
+        rotateInPlace(graph,MatrixBase.rotateZM(degree));
     }
 
     // GENERAL functions
-    private static void rotateInPlace(SceneGraph graph, double degree, BiConsumer<SceneGraph,Double> rotate)
+    private static void rotateInPlace(SceneGraph graph, double[][] rotate)
     {
-        //  to origin
-        translate(graph,new double[] {-graph.fixedPoint[0],-graph.fixedPoint[1],-graph.fixedPoint[2]});
-        // rotate
-        rotate.accept(graph,degree);
-        // translate back
-        translate(graph,new double[] {graph.fixedPoint[0],graph.fixedPoint[1],graph.fixedPoint[2]});
+        double[][] preMult_1 = mult(rotate,MatrixBase.translationM(-graph.fixedPoint[0],-graph.fixedPoint[1],-graph.fixedPoint[2]));
+        double[][] preMult_2 = mult(MatrixBase.translationM(graph.fixedPoint[0],graph.fixedPoint[1],graph.fixedPoint[2]),preMult_1);
+        Operation(graph, preMult_2);
     }
 
     public static void Operation(SceneGraph graph,double[][] op)
