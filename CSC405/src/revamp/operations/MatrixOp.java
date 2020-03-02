@@ -12,51 +12,31 @@ public class MatrixOp
     public static void translate(SceneGraph graph, double[] point)
     {
         Operation(graph,
-                new double[][] {
-                        {1.0,0.0,0.0,point[0]},
-                        {0.0,1.0,0.0,point[1]},
-                        {0.0,0.0,1.0,point[2]},
-                        {0.0,0.0,0.0,1.0}});
+                MatrixBase.translationM(point[0],point[1],point[2]));
     }
 
     public static void scale(SceneGraph graph, double[] point)
     {
         Operation(graph,
-                new double[][] {
-                        {point[0],0.0,0.0,0.0},
-                        {0.0,point[1],0.0,0.0},
-                        {0.0,0.0,point[2],0.0},
-                        {0.0,0.0,0.0,1.0}});
+                MatrixBase.scaleM(point[0],point[1],point[2]));
     }
 
-    public static void rotateX(SceneGraph graph, double degreeN)
+    public static void rotateX(SceneGraph graph, double degree)
     {
         Operation(graph,
-                new double[][]{
-                        {1, 0, 0, 0},
-                        {0, Math.cos(Math.toRadians(degreeN)), -Math.sin(Math.toRadians(degreeN)), 0},
-                        {0, Math.sin(Math.toRadians(degreeN)), Math.cos(Math.toRadians(degreeN)), 0},
-                        {0, 0, 0, 1}});
+                MatrixBase.rotateXM(degree));
     }
 
     public static void rotateY(SceneGraph graph, double degree)
     {
         Operation(graph,
-                new double[][]{
-                        {Math.cos(Math.toRadians(degree)), 0, Math.sin(Math.toRadians(degree)), 0},
-                        {0, 1, 0, 0},
-                        {-Math.sin(Math.toRadians(degree)), 0, Math.cos(Math.toRadians(degree)), 0},
-                        {0, 0, 0, 1}});
+                MatrixBase.rotateYM(degree));
     }
 
     public static void rotateZ(SceneGraph graph, double degree)
     {
         Operation(graph,
-                new double[][]{
-                        {Math.cos(Math.toRadians(degree)), -Math.sin(Math.toRadians(degree)), 0, 0},
-                        {Math.sin(Math.toRadians(degree)), Math.cos(Math.toRadians(degree)), 0, 0},
-                        {0, 0, 1, 0},
-                        {0, 0, 0, 1}});
+                MatrixBase.rotateZM(degree));
     }
 
     public static void rotateXInPlace(SceneGraph graph, double degree)

@@ -190,11 +190,11 @@ public class GraphicsJavaFX extends Application
             fileChooser.getExtensionFilters().add(extFilter);
             // fixedPoint = new TextField("0,0,0");
             //fixedPoint.setMaxWidth(100);
-            point = new TextField("x,y,z");
+            point = new TextField("0,0,0");
             point.setMaxWidth(100);
-            scale_amt = new TextField("x,y,z");
+            scale_amt = new TextField("0,0,0");
             scale_amt.setMaxWidth(100);
-            degree = new TextField("degrees");
+            degree = new TextField("45");
             degree.setMaxWidth(60);
 
             // -- set up buttons
