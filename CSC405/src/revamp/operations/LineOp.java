@@ -3,7 +3,7 @@ package revamp.operations;
 public class LineOp
 {
     /// Ref: Wikipedia - https://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm#Algorithm
-    public static void drawLine(int x0, int y0, int x1, int y1, int[][] framebuffer)
+    private static void drawLine(int x0, int y0, int x1, int y1, int[][] framebuffer)
     {
         //System.out.println("( " + x0 + ", " + y0 + " )" +"( " + x1 + ", " + y1 + " )" );
         if (Math.abs(y1 - y0) < Math.abs(x1 - x0))
@@ -23,7 +23,7 @@ public class LineOp
 
     public static void drawLine(double x0, double y0, double x1, double y1, int[][] framebuffer)
     {
-        drawLine((int) x0,(int) y0,(int) x1, (int) y1,framebuffer);
+        drawLine((int) y0,(int) x0,(int) y1, (int) x1,framebuffer);
     }
 
     private static void plotLineLow(int x0, int y0, int x1, int y1,  int[][] framebuffer)
