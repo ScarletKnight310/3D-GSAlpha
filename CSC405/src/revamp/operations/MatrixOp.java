@@ -1,71 +1,71 @@
 package revamp.operations;
 
-import revamp.base.SceneGraph;
-import java.util.function.BiConsumer;
+import revamp.base.*;
 
-
-public class MatrixOp
+public class MatrixOp 
 {
-
-    // Speci Functions
-    public static void translate(SceneGraph graph, double[] point)
+    public static void translate(Shape shape, double[] point)
     {
-        Operation(graph,
+        Operation(shape,
                 MatrixBase.translationM(point[0],point[1],point[2]));
     }
 
-    public static void scale(SceneGraph graph, double[] point)
+    public static void scale(Shape shape, double[] point)
     {
-        Operation(graph,
+        Operation(shape,
                 MatrixBase.scaleM(point[0],point[1],point[2]));
     }
 
-    public static void rotateX(SceneGraph graph, double degree)
+    public static void rotateX(Shape shape, double degree)
     {
-        Operation(graph,
+        Operation(shape,
                 MatrixBase.rotateXM(degree));
     }
 
-    public static void rotateY(SceneGraph graph, double degree)
+    public static void rotateY(Shape shape, double degree)
     {
-        Operation(graph,
+        Operation(shape,
                 MatrixBase.rotateYM(degree));
     }
 
-    public static void rotateZ(SceneGraph graph, double degree)
+    public static void rotateZ(Shape shape, double degree)
     {
-        Operation(graph,
+        Operation(shape,
                 MatrixBase.rotateZM(degree));
     }
 
-    public static void rotateXInPlace(SceneGraph graph, double degree)
+    public static void rotateXInPlace(Shape shape, double degree)
     {
-        rotateInPlace(graph,MatrixBase.rotateXM(degree));
+        rotateInPlace(shape,MatrixBase.rotateXM(degree));
     }
 
-    public static void rotateYInPlace(SceneGraph graph, double degree)
+    public static void rotateYInPlace(Shape shape, double degree)
     {
-        rotateInPlace(graph,MatrixBase.rotateYM(degree));
+        rotateInPlace(shape,MatrixBase.rotateYM(degree));
     }
 
-    public static void rotateZInPlace(SceneGraph graph, double degree)
+    public static void rotateZInPlace(Shape shape, double degree)
     {
-        rotateInPlace(graph,MatrixBase.rotateZM(degree));
+        rotateInPlace(shape,MatrixBase.rotateZM(degree));
     }
 
     // GENERAL functions
-    private static void rotateInPlace(SceneGraph graph, double[][] rotate)
+    private static void rotateInPlace(Shape shape, double[][] rotate)
     {
-        double[][] preMult_1 = mult(rotate,MatrixBase.translationM(-graph.fixedPoint[0],-graph.fixedPoint[1],-graph.fixedPoint[2]));
-        double[][] preMult_2 = mult(MatrixBase.translationM(graph.fixedPoint[0],graph.fixedPoint[1],graph.fixedPoint[2]),preMult_1);
-        Operation(graph, preMult_2);
+        double[][] preMult_1 = mult(rotate,MatrixBase.translationM(-shape.fixedpoint[0],-shape.fixedpoint[1],-shape.fixedpoint[2]));
+        double[][] preMult_2 = mult(MatrixBase.translationM(shape.fixedpoint[0],shape.fixedpoint[1],shape.fixedpoint[2]),preMult_1);
+        Operation(shape, preMult_2);
     }
-
-    public static void Operation(SceneGraph graph,double[][] op)
+    
+    public static void Operation(Shape shape, double[][] op)
     {
-        graph.change(mult(op,graph.getShape()));
+        for(int i = 0; i < shape.numOfFaces(); i++)
+        {
+            shape.setFace(i,mult(op,shape.getFace(i)));
+        }
+        shape.fixedpoint = shape.calculateFixedPoint();
     }
-
+    
     private static double[][] mult(double A[][], double B[][]) throws IllegalArgumentException
     {
         if (A[0].length != B.length) {

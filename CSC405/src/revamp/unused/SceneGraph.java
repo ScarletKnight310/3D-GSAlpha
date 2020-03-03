@@ -1,4 +1,4 @@
-package revamp.base;
+package revamp.unused;
 
 import revamp.operations.LineOp;
 
@@ -54,5 +54,4 @@ public class SceneGraph
          shape = original;
          fixedPoint = new double[]{0,0,0,1};
      }
-
 }

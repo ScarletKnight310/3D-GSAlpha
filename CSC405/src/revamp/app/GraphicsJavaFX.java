@@ -23,9 +23,10 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+//import revamp.unused.MatrixOpSG;
+import revamp.base.*;
 import revamp.operations.MatrixOp;
-import revamp.base.RenderSurface;
-import revamp.base.SceneGraph;
+import revamp.unused.MatrixOpSG;
 
 
 public class GraphicsJavaFX extends Application
@@ -40,7 +41,7 @@ public class GraphicsJavaFX extends Application
     // -- Controls container
     ControlBoxInner controlBox;
     Stage mainStage;
-    SceneGraph graph;
+    Shape shape;
     AnimationTimer animationTimer;
 
     @Override
@@ -65,7 +66,7 @@ public class GraphicsJavaFX extends Application
         // -- paint the graphics canvas before the initial display
         graphicsCanvas.repaint();
         // set up graph
-        graph = new SceneGraph();
+        shape = new Shape();
         // -- display the application window
         mainStage.show();
         // -- set keyboard focus to the pane
@@ -171,8 +172,8 @@ public class GraphicsJavaFX extends Application
         private Button rotateZ;
 
         private Button reset;
-        private Button spin;
-        private boolean toggle = false;
+        //private Button spin;
+        //private boolean toggle = false;
         private Button savePNG;
 
         private TextField point;
@@ -220,18 +221,18 @@ public class GraphicsJavaFX extends Application
             this.getChildren().add(new Label(" "));
             this.getChildren().add(new Label(" Misc:"));
             this.getChildren().add(reset);
-            this.getChildren().add(spin);
+            //this.getChildren().add(spin);
             this.getChildren().add(savePNG);
 
-            animationTimer = new AnimationTimer() {
-                public void handle(long currentNanoTime) {
-                    graphicsCanvas.renderSurface.clear();
-                    MatrixOp.rotateZInPlace(graph, Double.parseDouble(degree.getText()));
-                    graph.render(graphicsCanvas.renderSurface.getSurface());
-                    graphicsCanvas.repaint();
-                    pane.requestFocus();
-                }
-            };
+//            animationTimer = new AnimationTimer() {
+//                public void handle(long currentNanoTime) {
+//                    graphicsCanvas.renderSurface.clear();
+//                    MatrixOp.rotateZInPlace(shape, Double.parseDouble(degree.getText()));
+//                    shape.render(graphicsCanvas.renderSurface.getSurface());
+//                    graphicsCanvas.repaint();
+//                    pane.requestFocus();
+//                }
+//            };
         }
 
         private void prepareButtonHandlers()
@@ -244,7 +245,7 @@ public class GraphicsJavaFX extends Application
                 public void handle(ActionEvent actionEvent) {
                     // -- process the button
                     graphicsCanvas.renderSurface.clear();
-                    graph.render(graphicsCanvas.renderSurface.getSurface());
+                    shape.render(graphicsCanvas.renderSurface.getSurface());
                     graphicsCanvas.repaint();
                     // -- and return focus back to the pane
                     pane.requestFocus();
@@ -258,8 +259,8 @@ public class GraphicsJavaFX extends Application
                 @Override
                 public void handle(ActionEvent actionEvent) {
                     // -- process the button
-                    graph.fixedPoint = convertToPoint(point);
-                    MatrixOp.translate(graph, convertToPoint(point));
+                    shape.fixedpoint = convertToPoint(point);
+                    MatrixOp.translate(shape, convertToPoint(point));
                     //  fixedPoint.setText(graph.fixedPoint[0] +"," + graph.fixedPoint[1] +","+graph.fixedPoint[2]);
                     // -- and return focus back to the pane
                     pane.requestFocus();
@@ -273,7 +274,7 @@ public class GraphicsJavaFX extends Application
                 @Override
                 public void handle(ActionEvent actionEvent) {
                     // -- process the button
-                    MatrixOp.scale(graph, convertToPoint(scale_amt));
+                    MatrixOp.scale(shape, convertToPoint(scale_amt));
                     //   fixedPoint.setText(graph.fixedPoint[0] +"," + graph.fixedPoint[1] +","+graph.fixedPoint[2]);
                     // -- and return focus back to the pane
                     pane.requestFocus();
@@ -287,7 +288,7 @@ public class GraphicsJavaFX extends Application
                 @Override
                 public void handle(ActionEvent actionEvent) {
                     // -- process the button
-                    MatrixOp.rotateXInPlace(graph, Double.parseDouble(degree.getText()));
+                    MatrixOp.rotateXInPlace(shape, Double.parseDouble(degree.getText()));
                     // -- and return focus back to the pane
                     pane.requestFocus();
                 }
@@ -300,7 +301,7 @@ public class GraphicsJavaFX extends Application
                 @Override
                 public void handle(ActionEvent actionEvent) {
                     // -- process the button
-                    MatrixOp.rotateYInPlace(graph, Double.parseDouble(degree.getText()));
+                    MatrixOp.rotateYInPlace(shape, Double.parseDouble(degree.getText()));
                     // -- and return focus back to the pane
                     pane.requestFocus();
                 }
@@ -313,7 +314,7 @@ public class GraphicsJavaFX extends Application
                 @Override
                 public void handle(ActionEvent actionEvent) {
                     // -- process the button
-                    MatrixOp.rotateZInPlace(graph, Double.parseDouble(degree.getText()));
+                    MatrixOp.rotateZInPlace(shape, Double.parseDouble(degree.getText()));
                     // -- and return focus back to the pane
                     pane.requestFocus();
                 }
@@ -326,35 +327,35 @@ public class GraphicsJavaFX extends Application
                 @Override
                 public void handle(ActionEvent actionEvent) {
                     // -- process the button
-                    graph.reset();
+                    shape.reset();
                     //    fixedPoint.setText(graph.fixedPoint[0] +"," + graph.fixedPoint[1] +","+graph.fixedPoint[2]);
                     // -- and return focus back to the pane
                     pane.requestFocus();
                 }
             });
             // Spin
-            spin = new Button();
-            spin.setText("Spin It!");
-            spin.setOnAction(new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent actionEvent) {
-                    // -- process the button
-                    toggle = !toggle;
-                    if(toggle)
-                    {
-                        graph.fixedPoint = new double[]{(WIDTH/2),(HEIGHT/2),0};
-                        MatrixOp.translate(graph,graph.fixedPoint);
-                        animationTimer.start();
-                    }
-                    else
-                    {
-                        animationTimer.stop();
-                        graph.reset();
-                    }
-                    // -- and return focus back to the pane
-                    pane.requestFocus();
-                }
-            });
+//            spin = new Button();
+//            spin.setText("Spin It!");
+//            spin.setOnAction(new EventHandler<ActionEvent>() {
+//                @Override
+//                public void handle(ActionEvent actionEvent) {
+//                    // -- process the button
+//                    toggle = !toggle;
+//                    if(toggle)
+//                    {
+//                        graph.fixedPoint = new double[]{(WIDTH/2),(HEIGHT/2),0};
+//                        MatrixOpSG.translate(graph,graph.fixedPoint);
+//                        animationTimer.start();
+//                    }
+//                    else
+//                    {
+//                        animationTimer.stop();
+//                        graph.reset();
+//                    }
+//                    // -- and return focus back to the pane
+//                    pane.requestFocus();
+//                }
+//            });
             //Save As PNG
             savePNG = new Button();
             savePNG.setText("Save as PNG");
