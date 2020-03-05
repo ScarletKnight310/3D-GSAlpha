@@ -1,59 +1,69 @@
 package revamp.operations;
 
-import revamp.base.*;
+import revamp.basetypes.*;
 
 public class MatrixOp 
 {
     public static void translate(Shape shape, double[] point)
     {
         Operation(shape,
-                MatrixBase.translationM(point[0],point[1],point[2]));
+                translationM(point[0],point[1],point[2]));
+       /* shape.fixedpoint = new double[]{point[0]+shape.fixedpoint[0],
+                                        point[1]+shape.fixedpoint[1],
+                                        point[2]+shape.fixedpoint[2],
+                                        shape.fixedpoint[3]};*/
+    }
+
+    public static void translate_WithoutFixed(Shape shape, double[] point)
+    {
+        Operation(shape,
+                translationM(point[0],point[1],point[2]));
     }
 
     public static void scale(Shape shape, double[] point)
     {
         Operation(shape,
-                MatrixBase.scaleM(point[0],point[1],point[2]));
+                scaleM(point[0],point[1],point[2]));
     }
 
     public static void rotateX(Shape shape, double degree)
     {
         Operation(shape,
-                MatrixBase.rotateXM(degree));
+                rotateXM(degree));
     }
 
     public static void rotateY(Shape shape, double degree)
     {
         Operation(shape,
-                MatrixBase.rotateYM(degree));
+                rotateYM(degree));
     }
 
     public static void rotateZ(Shape shape, double degree)
     {
         Operation(shape,
-                MatrixBase.rotateZM(degree));
+                rotateZM(degree));
     }
 
     public static void rotateXInPlace(Shape shape, double degree)
     {
-        rotateInPlace(shape,MatrixBase.rotateXM(degree));
+        rotateInPlace(shape,rotateXM(degree));
     }
 
     public static void rotateYInPlace(Shape shape, double degree)
     {
-        rotateInPlace(shape,MatrixBase.rotateYM(degree));
+        rotateInPlace(shape,rotateYM(degree));
     }
 
     public static void rotateZInPlace(Shape shape, double degree)
     {
-        rotateInPlace(shape,MatrixBase.rotateZM(degree));
+        rotateInPlace(shape,rotateZM(degree));
     }
 
     // GENERAL functions
     private static void rotateInPlace(Shape shape, double[][] rotate)
     {
-        double[][] preMult_1 = mult(rotate,MatrixBase.translationM(-shape.fixedpoint[0],-shape.fixedpoint[1],-shape.fixedpoint[2]));
-        double[][] preMult_2 = mult(MatrixBase.translationM(shape.fixedpoint[0],shape.fixedpoint[1],shape.fixedpoint[2]),preMult_1);
+        double[][] preMult_1 = mult(rotate,translationM(-shape.fixedpoint[0],-shape.fixedpoint[1],-shape.fixedpoint[2]));
+        double[][] preMult_2 = mult(translationM(shape.fixedpoint[0],shape.fixedpoint[1],shape.fixedpoint[2]),preMult_1);
         Operation(shape, preMult_2);
     }
     
@@ -63,7 +73,6 @@ public class MatrixOp
         {
             shape.setFace(i,mult(op,shape.getFace(i)));
         }
-        shape.fixedpoint = shape.calculateFixedPoint();
     }
     
     private static double[][] mult(double A[][], double B[][]) throws IllegalArgumentException
@@ -83,5 +92,77 @@ public class MatrixOp
             }
         }
         return C;
+    }
+
+    public static double[][] translationM(double x, double y, double z) {
+        return new double[][]{
+                {1.0, 0.0, 0.0, x},
+                {0.0, 1.0, 0.0, y},
+                {0.0, 0.0, 1.0, z},
+                {0.0, 0.0, 0.0, 1.0}};
+    }
+
+    public static double[][] scaleM(double x, double y, double z) {
+        return new double[][]{
+                {x, 0.0, 0.0, 0.0},
+                {0.0, y, 0.0, 0.0},
+                {0.0, 0.0, z, 0.0},
+                {0.0, 0.0, 0.0, 1.0}};
+    }
+
+    public static double[][] rotateXM(double degree) {
+        return new double[][]{
+                {1, 0, 0, 0},
+                {0, Math.cos(Math.toRadians(degree)), -Math.sin(Math.toRadians(degree)), 0},
+                {0, Math.sin(Math.toRadians(degree)), Math.cos(Math.toRadians(degree)), 0},
+                {0, 0, 0, 1}};
+    }
+
+    public static double[][] rotateYM(double degree) {
+        return new double[][]{
+                {Math.cos(Math.toRadians(degree)), 0, Math.sin(Math.toRadians(degree)), 0},
+                {0, 1, 0, 0},
+                {-Math.sin(Math.toRadians(degree)), 0, Math.cos(Math.toRadians(degree)), 0},
+                {0, 0, 0, 1}};
+    }
+
+    public static double[][] rotateZM(double degree) {
+        return new double[][]{
+                {Math.cos(Math.toRadians(degree)), -Math.sin(Math.toRadians(degree)), 0, 0},
+                {Math.sin(Math.toRadians(degree)), Math.cos(Math.toRadians(degree)), 0, 0},
+                {0, 0, 1, 0},
+                {0, 0, 0, 1}};
+    }
+
+    /// for Later-----------------------------------------------------------------
+    public static double[][] Rxp(double z, double y, double d) {
+        return new double[][]{
+                {1, 0, 0, 0},
+                {0,z/d , -y/d, 0},
+                {0, y/d, z/d, 0},
+                {0, 0, 0, 1}};
+    }
+
+    public static double[][] Rxn(double z, double y, double d) {
+        return new double[][]{
+                {1, 0, 0, 0},
+                {0,z/d , y/d, 0},
+                {0, -y/d, z/d, 0},
+                {0, 0, 0, 1}};
+    }
+
+    public static double[][] Ryp(double x, double d) {
+        return new double[][]{
+                {d, 0, -x, 0},
+                {0, 1, 0, 0},
+                {x, 0, d, 0},
+                {0, 0, 0, 1}};
+    }
+    public static double[][] Ryn(double x, double d) {
+        return new double[][]{
+                {d, 0, x, 0},
+                {0, 1, 0, 0},
+                {-x, 0, d, 0},
+                {0, 0, 0, 1}};
     }
 }

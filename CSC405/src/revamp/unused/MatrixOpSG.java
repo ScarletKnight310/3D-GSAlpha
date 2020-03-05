@@ -1,7 +1,5 @@
 package revamp.unused;
 
-import revamp.operations.MatrixBase;
-
 
 public class MatrixOpSG
 {

@@ -1,9 +1,9 @@
-package revamp.base;
+package revamp.basetypes;
 
+import revamp.operations.CrossOp;
 import revamp.operations.LineOp;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class Shape
 {
@@ -24,7 +24,7 @@ public class Shape
                 }),
                 // Back
                 new Shape2D(new double[][] {
-                        {-100.0, 100.0, 100.0, -100.0},
+                        {100.0, -100.0, -100.0, 100.0},
                         {-100.0, -100.0, 100.0, 100.0},
                         {-100.0, -100.0, -100.0, -100.0},
                         {1.0, 1.0, 1.0, 1.0}
@@ -38,7 +38,7 @@ public class Shape
                 }),
                 // Bottom
                 new Shape2D(new double[][] {
-                        {-100.0, 100.0, 100.0, -100.0},
+                        {100.0, -100.0, -100.0, 100.0},
                         {100.0, 100.0, 100.0, 100.0},
                         {-100.0, -100.0, 100.0, 100.0},
                         {1.0, 1.0, 1.0, 1.0}
@@ -58,9 +58,13 @@ public class Shape
                         {1.0, 1.0, 1.0, 1.0}
                 })
         };
-        //fixedpoint = new double[]{0.0,0.0,0.0,1.0};
-        fixedpoint = calculateFixedPoint();
-        original = shapeFull;
+        fixedpoint = new double[]{0.0,0.0,0.0,1.0};
+        //fixedpoint = calculateFixedPoint();
+        original = new Shape2D[shapeFull.length];
+        for(int i = 0; i < shapeFull.length; i++)
+        {
+            original[i] = shapeFull[i];
+        }
     }
 
     public Shape(ArrayList<double[][]> faces)
@@ -69,6 +73,7 @@ public class Shape
         for(int i = 0; i < faces.size(); i++)
         {
             shapeFull[i] = new Shape2D(faces.get(i));
+            original[i] = shapeFull[i];
         }
         fixedpoint = calculateFixedPoint();
     }
@@ -86,14 +91,19 @@ public class Shape
         ArrayList<double[][]> faces = new ArrayList<>();
         for(Shape2D f : shapeFull)
         {
-            faces.add(f.shape_part);
+            faces.add(f.shapePrt);
         }
         return faces;
     }
 
     public double[][] getFace(int i)
     {
-        return shapeFull[i].shape_part;
+        return shapeFull[i].shapePrt;
+    }
+
+    public double[] getSurfaceNorm(int i)
+    {
+        return shapeFull[i].surfaceNorm;
     }
 
     public void setFace(int i, double[][] points)
@@ -115,35 +125,49 @@ public class Shape
         return fp;
     }
 
-    public int numOfFaces()
-    {
-        return shapeFull.length;
-    }
-
     public void reset()
     {
         shapeFull = original;
         fixedpoint = calculateFixedPoint();
     }
 
+    public int numOfFaces()
+    {
+        return shapeFull.length;
+    }
+
     public class Shape2D
     {
-        double[][] shape_part;
+        double[][] shapePrt;
+        double[] surfaceNorm;
         double[] fixedpoint;
 
         public Shape2D(double[][] shape_part)
         {
-            this.shape_part = shape_part;
+            this.shapePrt = shape_part;
             this.fixedpoint = calculateFixedPoint();
+            this.surfaceNorm = calculateSurfaceNorm();
         }
 
         protected void render(int[][] framebuffer)
         {
-            for(int i = 0; i < shape_part[0].length-1; i++)
+            for(int i = 0; i < shapePrt[0].length-1; i++)
             {
-                LineOp.drawLine(shape_part[0][i],shape_part[1][i],shape_part[0][i+1],shape_part[1][i+1],framebuffer);
+                LineOp.drawLine(shapePrt[0][i],shapePrt[1][i],shapePrt[0][i+1],shapePrt[1][i+1],framebuffer);
             }
-            LineOp.drawLine(shape_part[0][shape_part[0].length-1],shape_part[1][shape_part[0].length-1],shape_part[0][0],shape_part[1][0],framebuffer);
+            LineOp.drawLine(shapePrt[0][shapePrt[0].length-1],shapePrt[1][shapePrt[0].length-1],shapePrt[0][0],shapePrt[1][0],framebuffer);
+        }
+
+        protected double[] calculateSurfaceNorm()
+        {
+            double[] A = new double[] {shapePrt[0][1] - shapePrt[0][0],
+                                       shapePrt[1][1] - shapePrt[1][0],
+                                       shapePrt[2][1] - shapePrt[2][0]};
+            double[] B = new double[] {shapePrt[0][3] - shapePrt[0][0],
+                                       shapePrt[1][3] - shapePrt[1][0],
+                                       shapePrt[2][3] - shapePrt[2][0]};
+
+            return CrossOp.unitVector(CrossOp.cross(A,B));
         }
 
         protected double[] calculateFixedPoint()
@@ -151,11 +175,11 @@ public class Shape
             double[] fp = new double[4];
             for(int i= 0; i< fp.length; i++)
             {
-                for(int c = 0; c < shape_part[0].length; c++)
+                for(int c = 0; c < shapePrt[0].length; c++)
                 {
-                    fp[i] += shape_part[i][c];
+                    fp[i] += shapePrt[i][c];
                 }
-                fp[i] = fp[i]/shape_part[0].length;
+                fp[i] = fp[i]/shapePrt[0].length;
             }
             return fp;
         }

@@ -1,6 +1,6 @@
 package revamp;
 
-import revamp.base.Shape;
+import revamp.basetypes.Shape;
 
 public class Test {
     public static void main(String[] args)

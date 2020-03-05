@@ -21,6 +21,7 @@ public class LineOp
         }
     }
 
+    // also corrects x-axis and y-axis
     public static void drawLine(double x0, double y0, double x1, double y1, int[][] framebuffer)
     {
         drawLine((int) y0,(int) x0,(int) y1, (int) x1,framebuffer);

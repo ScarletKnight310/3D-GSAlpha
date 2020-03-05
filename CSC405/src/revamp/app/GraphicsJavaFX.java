@@ -24,9 +24,8 @@ import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 //import revamp.unused.MatrixOpSG;
-import revamp.base.*;
+import revamp.basetypes.*;
 import revamp.operations.MatrixOp;
-import revamp.unused.MatrixOpSG;
 
 
 public class GraphicsJavaFX extends Application
@@ -172,7 +171,7 @@ public class GraphicsJavaFX extends Application
         private Button rotateZ;
 
         private Button reset;
-        //private Button spin;
+        private Button SurfaceNorms;
         //private boolean toggle = false;
         private Button savePNG;
 
@@ -221,7 +220,7 @@ public class GraphicsJavaFX extends Application
             this.getChildren().add(new Label(" "));
             this.getChildren().add(new Label(" Misc:"));
             this.getChildren().add(reset);
-            //this.getChildren().add(spin);
+            this.getChildren().add(SurfaceNorms);
             this.getChildren().add(savePNG);
 
 //            animationTimer = new AnimationTimer() {
@@ -328,34 +327,27 @@ public class GraphicsJavaFX extends Application
                 public void handle(ActionEvent actionEvent) {
                     // -- process the button
                     shape.reset();
-                    //    fixedPoint.setText(graph.fixedPoint[0] +"," + graph.fixedPoint[1] +","+graph.fixedPoint[2]);
                     // -- and return focus back to the pane
                     pane.requestFocus();
                 }
             });
-            // Spin
-//            spin = new Button();
-//            spin.setText("Spin It!");
-//            spin.setOnAction(new EventHandler<ActionEvent>() {
-//                @Override
-//                public void handle(ActionEvent actionEvent) {
-//                    // -- process the button
-//                    toggle = !toggle;
-//                    if(toggle)
-//                    {
-//                        graph.fixedPoint = new double[]{(WIDTH/2),(HEIGHT/2),0};
-//                        MatrixOpSG.translate(graph,graph.fixedPoint);
-//                        animationTimer.start();
-//                    }
-//                    else
-//                    {
-//                        animationTimer.stop();
-//                        graph.reset();
-//                    }
-//                    // -- and return focus back to the pane
-//                    pane.requestFocus();
-//                }
-//            });
+            // Prints surfaceNorms
+            SurfaceNorms = new Button();
+            SurfaceNorms.setText("Print SurfaceNorms");
+            SurfaceNorms.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent actionEvent) {
+                    // -- process the button
+                    System.out.println("-----------------------------------------------------");
+                    for(int i = 0; i < shape.numOfFaces(); i++)
+                    {
+                        double[] cur = shape.getSurfaceNorm(i);
+                        System.out.println("SN" +(i+1)+ ": "+cur[0] +", "+cur[1]+", "+cur[2]);
+                    }
+                    // -- and return focus back to the pane
+                    pane.requestFocus();
+                }
+            });
             //Save As PNG
             savePNG = new Button();
             savePNG.setText("Save as PNG");
@@ -378,14 +370,16 @@ public class GraphicsJavaFX extends Application
                 }
             });
         }
+        /////////////////////
         private double[] convertToPoint(TextField text)
         {
-            double[] result = new double[3];
+            double[] result = new double[4];
             String[] textBox = text.getText().split(",");
-            for(int i = 0; i < result.length; i++)
+            for(int i = 0; i < textBox.length; i++)
             {
                 result[i] = Double.parseDouble(textBox[i]);
             }
+            result[3] = shape.fixedpoint[3];
             return result;
         }
     }
