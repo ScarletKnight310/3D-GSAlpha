@@ -1,6 +1,6 @@
 package revamp.operations;
 
-public class CrossOp
+public class VectorOp
 {
     // for surface
     public static double[] cross(double[] A, double[] B)
@@ -23,5 +23,4 @@ public class CrossOp
         double mag = magnitude(A);
         return new double[] {A[0]/mag,A[1]/mag,A[2]/mag};
     }
-
 }

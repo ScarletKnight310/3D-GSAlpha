@@ -59,14 +59,32 @@ public class MatrixOp
         rotateInPlace(shape,rotateZM(degree));
     }
 
-    // GENERAL functions
+    // GENERAL functions for seperate rotations
     private static void rotateInPlace(Shape shape, double[][] rotate)
     {
         double[][] preMult_1 = mult(rotate,translationM(-shape.fixedpoint[0],-shape.fixedpoint[1],-shape.fixedpoint[2]));
         double[][] preMult_2 = mult(translationM(shape.fixedpoint[0],shape.fixedpoint[1],shape.fixedpoint[2]),preMult_1);
         Operation(shape, preMult_2);
     }
-    
+
+    // axis[0] == x, axis[1] == y, axis[2] == z
+    // degree gets converted from degrees to rads in function call rotateZM()
+    public static void rotateArb(Shape shape, double[] axisPre, double degree)
+    {
+        double[] axis = VectorOp.unitVector(axisPre);
+        double d = Math.sqrt(Math.pow(axis[1],2) + Math.pow(axis[2],2));
+
+        double[][] M1 = mult(Rxp(axis[2],axis[1],d),translationM(-shape.fixedpoint[0],-shape.fixedpoint[1],-shape.fixedpoint[2]));
+        double[][] M2 = mult(Ryp(axis[0],d),M1);
+        double[][] M3 = mult(rotateZM(degree),M2);
+        double[][] M4 = mult(Ryn(axis[0],d),M3);
+        double[][] M5 = mult(Rxn(axis[2],axis[1],d),M4);
+        double[][] last = mult(translationM(shape.fixedpoint[0],shape.fixedpoint[1],shape.fixedpoint[2]),M5);
+
+        Operation(shape,last);
+    }
+
+    // Does an operation of any to the given shape
     public static void Operation(Shape shape, double[][] op)
     {
         for(int i = 0; i < shape.numOfFaces(); i++)
@@ -74,7 +92,7 @@ public class MatrixOp
             shape.setFace(i,mult(op,shape.getFace(i)));
         }
     }
-    
+
     private static double[][] mult(double A[][], double B[][]) throws IllegalArgumentException
     {
         if (A[0].length != B.length) {
@@ -93,7 +111,7 @@ public class MatrixOp
         }
         return C;
     }
-
+////////////////////// all raw operations
     public static double[][] translationM(double x, double y, double z) {
         return new double[][]{
                 {1.0, 0.0, 0.0, x},

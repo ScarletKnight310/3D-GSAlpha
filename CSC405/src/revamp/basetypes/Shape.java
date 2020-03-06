@@ -1,6 +1,6 @@
 package revamp.basetypes;
 
-import revamp.operations.CrossOp;
+import revamp.operations.VectorOp;
 import revamp.operations.LineOp;
 
 import java.util.ArrayList;
@@ -167,7 +167,7 @@ public class Shape
                                        shapePrt[1][3] - shapePrt[1][0],
                                        shapePrt[2][3] - shapePrt[2][0]};
 
-            return CrossOp.unitVector(CrossOp.cross(A,B));
+            return VectorOp.unitVector(VectorOp.cross(A,B));
         }
 
         protected double[] calculateFixedPoint()
