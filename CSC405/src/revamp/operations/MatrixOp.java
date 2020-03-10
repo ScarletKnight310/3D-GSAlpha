@@ -46,25 +46,30 @@ public class MatrixOp
                 rotateZM(degree));
     }
 
+    public static void scaleInPlace(Shape shape, double[] sca)
+    {
+        OperateInPlace(shape,scaleM(sca[0], sca[1], sca[2]));
+    }
+
     public static void rotateXInPlace(Shape shape, double degree)
     {
-        rotateInPlace(shape,rotateXM(degree));
+        OperateInPlace(shape,rotateXM(degree));
     }
 
     public static void rotateYInPlace(Shape shape, double degree)
     {
-        rotateInPlace(shape,rotateYM(degree));
+        OperateInPlace(shape,rotateYM(degree));
     }
 
     public static void rotateZInPlace(Shape shape, double degree)
     {
-        rotateInPlace(shape,rotateZM(degree));
+        OperateInPlace(shape,rotateZM(degree));
     }
 
     // GENERAL functions for seperate rotations
-    private static void rotateInPlace(Shape shape, double[][] rotate)
+    private static void OperateInPlace(Shape shape, double[][] op)
     {
-        double[][] preMult_1 = mult(rotate,translationM(-shape.fixedpoint[0],-shape.fixedpoint[1],-shape.fixedpoint[2]));
+        double[][] preMult_1 = mult(op,translationM(-shape.fixedpoint[0],-shape.fixedpoint[1],-shape.fixedpoint[2]));
         double[][] preMult_2 = mult(translationM(shape.fixedpoint[0],shape.fixedpoint[1],shape.fixedpoint[2]),preMult_1);
         Operation(shape, preMult_2);
     }
@@ -83,6 +88,7 @@ public class MatrixOp
             rotateXInPlace(shape,degree);
             return;
         }
+        
         double[][] m = mult(Rxp(axis[2],axis[1],d),translationM(-shape.fixedpoint[0],-shape.fixedpoint[1],-shape.fixedpoint[2]));
         m = mult(Ryp(axis[0],d),m);
         m = mult(rotateZM(degree),m);

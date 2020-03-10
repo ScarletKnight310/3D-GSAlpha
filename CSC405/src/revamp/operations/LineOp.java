@@ -95,4 +95,16 @@ public class LineOp
             y++;
         }
     }
+
+
+    public static void fill(int value, int face[][])
+    {
+        for(int i = 0; i < face.length; i++)
+        {
+            for(int j = 0; j < face.length; j++)
+            {
+                face[i][j] = value;
+            }
+        }
+    }
 }

@@ -12,6 +12,16 @@ public class VectorOp
         return C;
     }
 
+    public static double dot(double[] A, double[] B)
+    {
+        if(A.length != B.length)
+            throw new IllegalArgumentException("incompatible arrays -> dotProduct");
+        double res = 0.0;
+        for(int i = 0; i < A.length; i++) {
+            res += A[i] * B[i];
+        }
+        return res;
+    }
     public static double magnitude(double[] A)
     {
         double mag = Math.sqrt(Math.pow(A[0],  2) + Math.pow(A[1],  2) + Math.pow(A[2],  2));
@@ -26,4 +36,5 @@ public class VectorOp
         double mag = magnitude(A);
         return new double[] {A[0]/mag,A[1]/mag,A[2]/mag};
     }
+
 }

@@ -270,7 +270,7 @@ public class GraphicsJavaFX extends Application
                 @Override
                 public void handle(ActionEvent actionEvent) {
                     // -- process the button
-                    MatrixOp.scale(shape, convertToPoint(scale_amt));
+                    MatrixOp.scaleInPlace(shape, convertToPoint(scale_amt));
                     //   fixedPoint.setText(graph.fixedPoint[0] +"," + graph.fixedPoint[1] +","+graph.fixedPoint[2]);
                     // -- and return focus back to the pane
                     pane.requestFocus();

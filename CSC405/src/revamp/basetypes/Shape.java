@@ -5,21 +5,24 @@ import revamp.operations.LineOp;
 
 import java.util.ArrayList;
 
+import static revamp.operations.VectorOp.dot;
+
 public class Shape
 {
     // WIP
     private Shape2D[] shapeFull;
     private Shape2D[] original;
     public double[] fixedpoint;
+    public double[] viewer = new double[] {0,0,-1};
 
     public Shape()
     {
         shapeFull = new Shape2D[] {
                 // Front
                 new Shape2D(new double[][] {
-                        {-100.0, 100.0, 100.0, -100.0},
-                        {-100.0, -100.0, 100.0, 100.0},
-                        {100.0, 100.0, 100.0, 100.0},
+                        {-100.0, 100.0, 100.0, -100.0},// X
+                        {-100.0, -100.0, 100.0, 100.0},// Y
+                        {100.0, 100.0, 100.0, 100.0},// Z
                         {1.0, 1.0, 1.0, 1.0}
                 }),
                 // Back
@@ -82,7 +85,8 @@ public class Shape
     {
         for(Shape2D shape: shapeFull)
         {
-            shape.render(framebuffer);
+            if(shape.visible)
+                shape.render(framebuffer);
         }
     }
 
@@ -141,12 +145,14 @@ public class Shape
         double[][] shapePrt;
         double[] surfaceNorm;
         double[] fixedpoint;
+        boolean visible = false;
 
         public Shape2D(double[][] shape_part)
         {
             this.shapePrt = shape_part;
             this.fixedpoint = calculateFixedPoint();
             this.surfaceNorm = calculateSurfaceNorm();
+            setVisible();
         }
 
         protected void render(int[][] framebuffer)
@@ -166,8 +172,13 @@ public class Shape
             double[] B = new double[] {shapePrt[0][3] - shapePrt[0][0],
                                        shapePrt[1][3] - shapePrt[1][0],
                                        shapePrt[2][3] - shapePrt[2][0]};
-
             return VectorOp.unitVector(VectorOp.cross(A,B));
+        }
+
+        protected void setVisible()
+        {
+            visible = (0 <= dot(viewer, surfaceNorm));
+            // code for surface
         }
 
         protected double[] calculateFixedPoint()
@@ -183,7 +194,6 @@ public class Shape
             }
             return fp;
         }
-
     }
 
 }
