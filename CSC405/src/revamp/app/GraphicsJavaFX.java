@@ -165,19 +165,16 @@ public class GraphicsJavaFX extends Application
         private Button render;
         private Button translate;
         private Button scale;
-
-        private Button rotateX;
-        private Button rotateY;
-        private Button rotateZ;
+        private Button rotate;
 
         private Button reset;
         private Button SurfaceNorms;
         //private boolean toggle = false;
         private Button savePNG;
 
-        private TextField point;
+        private TextField trans_amt;
         private TextField scale_amt;
-        // private TextField fixedPoint;
+        private TextField degree_amt;
         private TextField degree;
         private FileChooser fileChooser;
 
@@ -190,10 +187,12 @@ public class GraphicsJavaFX extends Application
             fileChooser.getExtensionFilters().add(extFilter);
             // fixedPoint = new TextField("0,0,0");
             //fixedPoint.setMaxWidth(100);
-            point = new TextField("0,0,0");
-            point.setMaxWidth(100);
+            trans_amt = new TextField("0,0,0");
+            trans_amt.setMaxWidth(100);
             scale_amt = new TextField("0,0,0");
             scale_amt.setMaxWidth(100);
+            degree_amt = new TextField("0,0,0");
+            degree_amt.setMaxWidth(100);
             degree = new TextField("45");
             degree.setMaxWidth(60);
 
@@ -206,16 +205,14 @@ public class GraphicsJavaFX extends Application
             this.getChildren().add(new Label(" Edit Scene:"));
             this.getChildren().add(translate);
             //this.getChildren().add(new Label("(x, y, z)"));
-            this.getChildren().add(point);
+            this.getChildren().add(trans_amt);
             this.getChildren().add(new Label(" "));
             this.getChildren().add(scale);
             // this.getChildren().add(new Label("(x, y, z)"));
             this.getChildren().add(scale_amt);
             this.getChildren().add(new Label(" "));
-            this.getChildren().add(rotateX);
-            this.getChildren().add(rotateY);
-            this.getChildren().add(rotateZ);
-            // this.getChildren().add(new Label("(Degrees)"));
+            this.getChildren().add(rotate);
+            this.getChildren().add(degree_amt);
             this.getChildren().add(degree);
             this.getChildren().add(new Label(" "));
             this.getChildren().add(new Label(" Misc:"));
@@ -238,7 +235,7 @@ public class GraphicsJavaFX extends Application
         {
             // graphic
             render = new Button();
-            render.setText("Scene");
+            render.setText("Render");
             render.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent actionEvent) {
@@ -258,8 +255,8 @@ public class GraphicsJavaFX extends Application
                 @Override
                 public void handle(ActionEvent actionEvent) {
                     // -- process the button
-                    shape.fixedpoint = convertToPoint(point);
-                    MatrixOp.translate(shape, convertToPoint(point));
+                    shape.fixedpoint = convertToPoint(trans_amt);
+                    MatrixOp.translate(shape, convertToPoint(trans_amt));
                     //  fixedPoint.setText(graph.fixedPoint[0] +"," + graph.fixedPoint[1] +","+graph.fixedPoint[2]);
                     // -- and return focus back to the pane
                     pane.requestFocus();
@@ -281,39 +278,13 @@ public class GraphicsJavaFX extends Application
             });
 
             // rotate X
-            rotateX = new Button();
-            rotateX.setText("Rotate X");
-            rotateX.setOnAction(new EventHandler<ActionEvent>() {
+            rotate = new Button();
+            rotate.setText("Rotate");
+            rotate.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent actionEvent) {
                     // -- process the button
-                    MatrixOp.rotateXInPlace(shape, Double.parseDouble(degree.getText()));
-                    // -- and return focus back to the pane
-                    pane.requestFocus();
-                }
-            });
-
-            // rotate Y
-            rotateY = new Button();
-            rotateY.setText("Rotate Y");
-            rotateY.setOnAction(new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent actionEvent) {
-                    // -- process the button
-                    MatrixOp.rotateYInPlace(shape, Double.parseDouble(degree.getText()));
-                    // -- and return focus back to the pane
-                    pane.requestFocus();
-                }
-            });
-
-            // rotate X
-            rotateZ = new Button();
-            rotateZ.setText("Rotate Z");
-            rotateZ.setOnAction(new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent actionEvent) {
-                    // -- process the button
-                    MatrixOp.rotateZInPlace(shape, Double.parseDouble(degree.getText()));
+                    MatrixOp.rotateArb(shape, convertToPoint(degree_amt), Double.parseDouble(degree.getText()));
                     // -- and return focus back to the pane
                     pane.requestFocus();
                 }

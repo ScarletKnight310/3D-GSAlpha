@@ -4,6 +4,8 @@ import revamp.basetypes.*;
 
 public class MatrixOp 
 {
+    public static double tresHold = 0.000000001;
+
     public static void translate(Shape shape, double[] point)
     {
         Operation(shape,
@@ -73,15 +75,28 @@ public class MatrixOp
     {
         double[] axis = VectorOp.unitVector(axisPre);
         double d = Math.sqrt(Math.pow(axis[1],2) + Math.pow(axis[2],2));
+        if(Math.abs(d) < tresHold)
+        {
+            // x axis
+            if(true)
+            {
+                
+            }
+            // y-axis
+            else if(true)
+            {
 
-        double[][] M1 = mult(Rxp(axis[2],axis[1],d),translationM(-shape.fixedpoint[0],-shape.fixedpoint[1],-shape.fixedpoint[2]));
-        double[][] M2 = mult(Ryp(axis[0],d),M1);
-        double[][] M3 = mult(rotateZM(degree),M2);
-        double[][] M4 = mult(Ryn(axis[0],d),M3);
-        double[][] M5 = mult(Rxn(axis[2],axis[1],d),M4);
-        double[][] last = mult(translationM(shape.fixedpoint[0],shape.fixedpoint[1],shape.fixedpoint[2]),M5);
+            }
 
-        Operation(shape,last);
+            return;
+        }
+        double[][] m = mult(Rxp(axis[2],axis[1],d),translationM(-shape.fixedpoint[0],-shape.fixedpoint[1],-shape.fixedpoint[2]));
+        m = mult(Ryp(axis[0],d),m);
+        m = mult(rotateZM(degree),m);
+        m = mult(Ryn(axis[0],d),m);
+        m = mult(Rxn(axis[2],axis[1],d),m);
+        m = mult(translationM(shape.fixedpoint[0],shape.fixedpoint[1],shape.fixedpoint[2]),m);
+        Operation(shape,m);
     }
 
     // Does an operation of any to the given shape

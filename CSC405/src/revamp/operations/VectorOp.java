@@ -14,7 +14,10 @@ public class VectorOp
 
     public static double magnitude(double[] A)
     {
-        return Math.sqrt(Math.pow(A[0],  2) + Math.pow(A[1],  2) + Math.pow(A[2],  2));
+        double mag = Math.sqrt(Math.pow(A[0],  2) + Math.pow(A[1],  2) + Math.pow(A[2],  2));
+        if(Math.abs(mag) < MatrixOp.tresHold)
+            throw new IllegalArgumentException("Invalid Axis Rotation");
+        return mag;
     }
 
     // it vectors :)
