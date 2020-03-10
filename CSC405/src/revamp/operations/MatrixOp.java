@@ -4,7 +4,7 @@ import revamp.basetypes.*;
 
 public class MatrixOp 
 {
-    public static double tresHold = 0.000000001;
+    public static final double tresHold = 0.000000001;
 
     public static void translate(Shape shape, double[] point)
     {
@@ -75,19 +75,12 @@ public class MatrixOp
     {
         double[] axis = VectorOp.unitVector(axisPre);
         double d = Math.sqrt(Math.pow(axis[1],2) + Math.pow(axis[2],2));
+        // System.out.println("x, y, z -> d =" + d);
+        // System.out.println(axisPre[0] +", " + axisPre[1] +", "+axisPre[2]);
+        // System.out.println(axis[0] +", " + axis[1] +", "+axis[2]);
         if(Math.abs(d) < tresHold)
         {
-            // x axis
-            if(true)
-            {
-                
-            }
-            // y-axis
-            else if(true)
-            {
-
-            }
-
+            rotateXInPlace(shape,degree);
             return;
         }
         double[][] m = mult(Rxp(axis[2],axis[1],d),translationM(-shape.fixedpoint[0],-shape.fixedpoint[1],-shape.fixedpoint[2]));
