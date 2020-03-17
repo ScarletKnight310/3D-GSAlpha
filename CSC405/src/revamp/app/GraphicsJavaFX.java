@@ -48,7 +48,7 @@ public class GraphicsJavaFX extends Application
     {
         this.mainStage = mainStage;
         // -- Application title
-        mainStage.setTitle("Assignment 5 Java FX");
+        mainStage.setTitle("Assignment 6 Java FX");
         // -- create canvas for drawing
         graphicsCanvas = new GraphicsCanvasInner(WIDTH, HEIGHT);
         // -- construct the controls
