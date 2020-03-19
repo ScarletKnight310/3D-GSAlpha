@@ -1,20 +1,21 @@
-package revamp.basetypes;
+package revamp.coreTypes;
 
-import revamp.operations.VectorOp;
+import revamp.operations.BaseOp;
 import revamp.operations.LineOp;
 
 import java.util.ArrayList;
 
-import static revamp.operations.VectorOp.dot;
+import static revamp.operations.BaseOp.dot;
 
 public class Shape
 {
-    // WIP
+
     private Shape2D[] shapeFull;
     private Shape2D[] original;
     public double[] fixedpoint;
     public double[] viewer = new double[] {0,0,-1};
 
+    // makes defualt shape "cube"
     public Shape()
     {
         shapeFull = new Shape2D[] {
@@ -70,6 +71,7 @@ public class Shape
         }
     }
 
+    // takes an arraylist of 2d shape cords and makes a 3d (or 2d) shape
     public Shape(ArrayList<double[][]> faces)
     {
         shapeFull = new Shape2D[faces.size()];
@@ -81,6 +83,7 @@ public class Shape
         fixedpoint = calculateFixedPoint();
     }
 
+    // renders the full shape seen
     public void render(int[][] framebuffer)
     {
         for(Shape2D shape: shapeFull)
@@ -90,6 +93,7 @@ public class Shape
         }
     }
 
+    // gets the shape info
     public ArrayList<double[][]> getShape()
     {
         ArrayList<double[][]> faces = new ArrayList<>();
@@ -100,21 +104,31 @@ public class Shape
         return faces;
     }
 
+    // gets a specific face of the shape
     public double[][] getFace(int i)
     {
         return shapeFull[i].shapePrt;
     }
 
+    // gets the surface normal of a specific face
     public double[] getSurfaceNorm(int i)
     {
         return shapeFull[i].surfaceNorm;
     }
 
+    // changes the face by making a new 2d shape in its place
     public void setFace(int i, double[][] points)
     {
         shapeFull[i] = new Shape2D(points);
     }
 
+    // changes the shape by simply passing its points
+    public void setFaceRE(int i, double[][] points)
+    {
+        shapeFull[i] = new Shape2D(points);
+    }
+
+    // calculates the fixed points of the shape, as a whole
     public double[] calculateFixedPoint()
     {
         double[] fp = new double[4];
@@ -172,7 +186,7 @@ public class Shape
             double[] B = new double[] {shapePrt[0][3] - shapePrt[0][0],
                                        shapePrt[1][3] - shapePrt[1][0],
                                        shapePrt[2][3] - shapePrt[2][0]};
-            return VectorOp.unitVector(VectorOp.cross(A,B));
+            return BaseOp.unitVector(BaseOp.cross(A,B));
         }
 
         protected void setVisible()

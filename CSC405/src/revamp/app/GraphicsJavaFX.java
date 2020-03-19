@@ -24,14 +24,14 @@ import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 //import revamp.unused.MatrixOpSG;
-import revamp.basetypes.*;
-import revamp.operations.MatrixOp;
+import revamp.coreTypes.*;
+import revamp.operations.TransformOp;
 
 
 public class GraphicsJavaFX extends Application
 {
-    int WIDTH = 500;
-    int HEIGHT = 500;
+    int WIDTH = 600;
+    int HEIGHT = 600;
     Scene mainScene;
     // -- Main container
     BorderPane pane;
@@ -172,9 +172,17 @@ public class GraphicsJavaFX extends Application
         //private boolean toggle = false;
         private Button savePNG;
 
-        private TextField trans_amt;
-        private TextField scale_amt;
-        private TextField degree_amt;
+        private TextField trans_amt_x;
+        private TextField trans_amt_y;
+        private TextField trans_amt_z;
+
+        private TextField scale_amt_x;
+        private TextField scale_amt_y;
+        private TextField scale_amt_z;
+
+        private TextField degree_amt_x;
+        private TextField degree_amt_y;
+        private TextField degree_amt_z;
         private TextField degree;
         private FileChooser fileChooser;
 
@@ -187,14 +195,28 @@ public class GraphicsJavaFX extends Application
             fileChooser.getExtensionFilters().add(extFilter);
             // fixedPoint = new TextField("0,0,0");
             //fixedPoint.setMaxWidth(100);
-            trans_amt = new TextField("0,0,0");
-            trans_amt.setMaxWidth(100);
-            scale_amt = new TextField("0,0,0");
-            scale_amt.setMaxWidth(100);
-            degree_amt = new TextField("0,0,0");
-            degree_amt.setMaxWidth(100);
+            trans_amt_x = new TextField("x");
+            trans_amt_x.setMaxWidth(50);
+            trans_amt_y = new TextField("y");
+            trans_amt_y.setMaxWidth(50);
+            trans_amt_z = new TextField("z");
+            trans_amt_z.setMaxWidth(50);
+
+            scale_amt_x = new TextField("x");
+            scale_amt_x.setMaxWidth(50);
+            scale_amt_y = new TextField("y");
+            scale_amt_y.setMaxWidth(50);
+            scale_amt_z = new TextField("z");
+            scale_amt_z.setMaxWidth(50);
+
+            degree_amt_x = new TextField("x");
+            degree_amt_x.setMaxWidth(50);
+            degree_amt_y = new TextField("y");
+            degree_amt_y.setMaxWidth(50);
+            degree_amt_z = new TextField("z");
+            degree_amt_z.setMaxWidth(50);
             degree = new TextField("45");
-            degree.setMaxWidth(60);
+            degree.setMaxWidth(50);
 
             // -- set up buttons
             //this.setSpacing(5);
@@ -205,14 +227,22 @@ public class GraphicsJavaFX extends Application
             this.getChildren().add(new Label(" Edit Scene:"));
             this.getChildren().add(translate);
             //this.getChildren().add(new Label("(x, y, z)"));
-            this.getChildren().add(trans_amt);
+            this.getChildren().add(trans_amt_x);
+            this.getChildren().add(trans_amt_y);
+            this.getChildren().add(trans_amt_z);
             this.getChildren().add(new Label(" "));
             this.getChildren().add(scale);
             // this.getChildren().add(new Label("(x, y, z)"));
-            this.getChildren().add(scale_amt);
+            this.getChildren().add(scale_amt_x);
+            this.getChildren().add(scale_amt_y);
+            this.getChildren().add(scale_amt_z);
             this.getChildren().add(new Label(" "));
             this.getChildren().add(rotate);
-            this.getChildren().add(degree_amt);
+            this.getChildren().add(degree_amt_x);
+            this.getChildren().add(degree_amt_y);
+            this.getChildren().add(degree_amt_z);
+            this.getChildren().add(new Label(" "));
+            this.getChildren().add(new Label(" Degrees"));
             this.getChildren().add(degree);
             this.getChildren().add(new Label(" "));
             this.getChildren().add(new Label(" Misc:"));
@@ -255,8 +285,8 @@ public class GraphicsJavaFX extends Application
                 @Override
                 public void handle(ActionEvent actionEvent) {
                     // -- process the button
-                    shape.fixedpoint = convertToPoint(trans_amt);
-                    MatrixOp.translate(shape, convertToPoint(trans_amt));
+                    shape.fixedpoint = convertToPoint(trans_amt_x, trans_amt_y, trans_amt_z);
+                    TransformOp.translate(shape, shape.fixedpoint);
                     //  fixedPoint.setText(graph.fixedPoint[0] +"," + graph.fixedPoint[1] +","+graph.fixedPoint[2]);
                     // -- and return focus back to the pane
                     pane.requestFocus();
@@ -270,7 +300,7 @@ public class GraphicsJavaFX extends Application
                 @Override
                 public void handle(ActionEvent actionEvent) {
                     // -- process the button
-                    MatrixOp.scaleInPlace(shape, convertToPoint(scale_amt));
+                    TransformOp.scaleInPlace(shape, convertToPoint(scale_amt_x, scale_amt_y, scale_amt_z));
                     //   fixedPoint.setText(graph.fixedPoint[0] +"," + graph.fixedPoint[1] +","+graph.fixedPoint[2]);
                     // -- and return focus back to the pane
                     pane.requestFocus();
@@ -284,7 +314,7 @@ public class GraphicsJavaFX extends Application
                 @Override
                 public void handle(ActionEvent actionEvent) {
                     // -- process the button
-                    MatrixOp.rotateArb(shape, convertToPoint(degree_amt), Double.parseDouble(degree.getText()));
+                    TransformOp.rotateArb(shape, convertToPoint(degree_amt_x, degree_amt_y, degree_amt_z), Double.parseDouble(degree.getText()));
                     // -- and return focus back to the pane
                     pane.requestFocus();
                 }
@@ -342,16 +372,24 @@ public class GraphicsJavaFX extends Application
             });
         }
         /////////////////////
-        private double[] convertToPoint(TextField text)
+        private double[] convertToPoint(TextField x, TextField y, TextField z)
         {
-            double[] result = new double[4];
-            String[] textBox = text.getText().split(",");
-            for(int i = 0; i < textBox.length; i++)
+            double[] tryThis = new double[4];
+            TextField[] text = new TextField[]{x,y,z};
+
+            for(int i = 0; i < text.length; i++)
             {
-                result[i] = Double.parseDouble(textBox[i]);
+                try {
+                    tryThis[i] = Double.parseDouble(text[i].getText());
+                }
+                // if you can't parse it, make it a zero
+                catch(NumberFormatException e) {
+                    tryThis[i] = 0;
+                }
             }
-            result[3] = shape.fixedpoint[3];
-            return result;
+
+            tryThis[3] = 1.0;
+            return tryThis;
         }
     }
 }
