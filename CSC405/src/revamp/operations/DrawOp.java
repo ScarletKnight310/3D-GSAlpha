@@ -1,6 +1,6 @@
 package revamp.operations;
 
-public class LineOp
+public class DrawOp
 {
     /// Ref: Wikipedia - https://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm#Algorithm
     private static void drawLine(int x0, int y0, int x1, int y1, int[][] framebuffer)
@@ -96,9 +96,37 @@ public class LineOp
         }
     }
 
-
-    public static void fill(int value, int face[][])
+    public static void fill(int value, double[][] shape, int[] center, int framebuffer[][])
     {
+        // finds the
+        // only x and y rows
+        double[] greatestValuesd = new double[] {Double.MIN_VALUE,Double.MIN_VALUE};
+        double[] lowestValuesd = new double[] {Double.MAX_VALUE,Double.MAX_VALUE};
+        for(int i = 0; i < shape.length-2; i++)
+        {
+            for(double c: shape[i])
+            {
+                greatestValuesd[i] =  Double.max(c,greatestValuesd[i]);
+                lowestValuesd[i] =  Double.min(c,lowestValuesd[i]);
+            }
+        }
+        int[] greatestValues = new int[] {(int)greatestValuesd[0],(int)greatestValuesd[1]};
+        int[] lowestValues = new int[] {(int)lowestValuesd[0],(int)lowestValuesd[1]};
+
+        for(int x = lowestValues[0]; x < greatestValues[0]; x++)
+        {
+            for(int y= lowestValues[1]; y < greatestValues[1]; y++)
+            {
+                try {
+
+                    if(BaseOp.isInside(shape,x,y))
+                        framebuffer[y][x] = value;
+                } catch (ArrayIndexOutOfBoundsException ex)
+                    { }
+            }
+        }
+    }
+        /*
         for(int i = 0; i < face.length; i++)
         {
             for(int j = 0; j < face.length; j++)
@@ -106,5 +134,7 @@ public class LineOp
                 face[i][j] = value;
             }
         }
-    }
+        */
+
 }
+

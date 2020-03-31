@@ -1,11 +1,10 @@
 package revamp.coreTypes;
 
 import revamp.operations.BaseOp;
-import revamp.operations.LineOp;
-
+import revamp.operations.DrawOp;
 import java.util.ArrayList;
 
-import static revamp.operations.BaseOp.dot;
+//import static revamp.operations.BaseOp.dot;
 
 public class Shape
 {
@@ -117,13 +116,14 @@ public class Shape
     }
 
     // changes the face by making a new 2d shape in its place
-    public void setFace(int i, double[][] points)
+    public void setFaceOLD(int i, double[][] points)
     {
         shapeFull[i] = new Shape2D(points);
     }
 
     // changes the shape by simply passing its points
-    public void setFaceRE(int i, double[][] points)
+    // Gonna fix this later :)
+    public void setFace(int i, double[][] points)
     {
         shapeFull[i] = new Shape2D(points);
     }
@@ -156,9 +156,12 @@ public class Shape
 
     public class Shape2D
     {
+        //double[][] whole;
         double[][] shapePrt;
         double[] surfaceNorm;
         double[] fixedpoint;
+
+        int color = 150;
         boolean visible = false;
 
         public Shape2D(double[][] shape_part)
@@ -173,9 +176,11 @@ public class Shape
         {
             for(int i = 0; i < shapePrt[0].length-1; i++)
             {
-                LineOp.drawLine(shapePrt[0][i],shapePrt[1][i],shapePrt[0][i+1],shapePrt[1][i+1],framebuffer);
+                DrawOp.drawLine(shapePrt[0][i],shapePrt[1][i],shapePrt[0][i+1],shapePrt[1][i+1],framebuffer);
             }
-            LineOp.drawLine(shapePrt[0][shapePrt[0].length-1],shapePrt[1][shapePrt[0].length-1],shapePrt[0][0],shapePrt[1][0],framebuffer);
+            DrawOp.drawLine(shapePrt[0][shapePrt[0].length-1],shapePrt[1][shapePrt[0].length-1],shapePrt[0][0],shapePrt[1][0],framebuffer);
+            // fill color
+            DrawOp.fill(color, shapePrt, new int[] {(int)fixedpoint[0],(int)fixedpoint[1]}, framebuffer);
         }
 
         protected double[] calculateSurfaceNorm()
@@ -191,7 +196,7 @@ public class Shape
 
         protected void setVisible()
         {
-            visible = (0 <= dot(viewer, surfaceNorm));
+            visible = (0 <= BaseOp.dot(viewer, surfaceNorm));
             // code for surface
         }
 
@@ -209,5 +214,4 @@ public class Shape
             return fp;
         }
     }
-
 }

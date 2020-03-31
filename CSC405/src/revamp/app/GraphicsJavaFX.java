@@ -314,7 +314,15 @@ public class GraphicsJavaFX extends Application
                 @Override
                 public void handle(ActionEvent actionEvent) {
                     // -- process the button
-                    TransformOp.rotateArb(shape, convertToPoint(degree_amt_x, degree_amt_y, degree_amt_z), Double.parseDouble(degree.getText()));
+                    double d;
+                    try {
+                        d = Double.parseDouble(degree.getText());
+                    }
+                    catch (NumberFormatException ex)
+                    {
+                        d = 0.0;
+                    }
+                    TransformOp.rotateArb(shape, convertToPoint(degree_amt_x, degree_amt_y, degree_amt_z),d);
                     // -- and return focus back to the pane
                     pane.requestFocus();
                 }
@@ -393,4 +401,3 @@ public class GraphicsJavaFX extends Application
         }
     }
 }
-

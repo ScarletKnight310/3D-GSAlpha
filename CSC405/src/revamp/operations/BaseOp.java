@@ -55,4 +55,12 @@ public class BaseOp
         }
         return C;
     }
+
+    // this currently only works with squares
+    public static boolean isInside(double[][] shape, int x, int y)
+    {
+        double Asum = 0;
+
+        return true;
+    }
 }

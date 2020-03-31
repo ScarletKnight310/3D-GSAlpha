@@ -1,6 +1,6 @@
 package revamp.unused;
 
-import revamp.operations.LineOp;
+import revamp.operations.DrawOp;
 
 public class SceneGraph
 {
@@ -34,9 +34,9 @@ public class SceneGraph
 //         LineOp.drawLine(shape[0][3],shape[1][3],shape[0][0],shape[1][0],framebuffer);
         for(int i = 0; i < shape[0].length-1; i++)
         {
-             LineOp.drawLine(shape[0][i],shape[1][i],shape[0][i+1],shape[1][i+1],framebuffer);
+             DrawOp.drawLine(shape[0][i],shape[1][i],shape[0][i+1],shape[1][i+1],framebuffer);
         }
-        LineOp.drawLine(shape[0][shape[0].length-1],shape[1][shape[0].length-1],shape[0][0],shape[1][0],framebuffer);
+        DrawOp.drawLine(shape[0][shape[0].length-1],shape[1][shape[0].length-1],shape[0][0],shape[1][0],framebuffer);
      }
 
      public void change(double[][] new_shape)
