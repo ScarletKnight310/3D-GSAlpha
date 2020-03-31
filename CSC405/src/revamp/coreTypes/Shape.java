@@ -180,7 +180,7 @@ public class Shape
             }
             DrawOp.drawLine(shapePrt[0][shapePrt[0].length-1],shapePrt[1][shapePrt[0].length-1],shapePrt[0][0],shapePrt[1][0],framebuffer);
             // fill color
-            DrawOp.fill(color, shapePrt, new int[] {(int)fixedpoint[0],(int)fixedpoint[1]}, framebuffer);
+            DrawOp.fill(color, framebuffer);
         }
 
         protected double[] calculateSurfaceNorm()

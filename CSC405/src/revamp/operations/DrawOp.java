@@ -126,6 +126,28 @@ public class DrawOp
             }
         }
     }
+    public static void fill(int value,  int framebuffer[][])
+    {
+       for(int i = 0; i < framebuffer.length; i++)
+       {
+           int j = 0;
+           while(j < framebuffer[i].length && framebuffer[i][j] == j++)//left
+           {
+               j++;
+           }
+           if(j == framebuffer[i].length)// not
+               continue;
+           int x0 = j;
+           int y0 = i;
+           while(j > x0 && framebuffer[i][j] == -1)//right
+           {
+               j--;
+           }
+           int x1 = j;
+           int y1 = i;
+           drawLine(x0,y0,x1,y1,framebuffer);
+       }
+    }
         /*
         for(int i = 0; i < face.length; i++)
         {

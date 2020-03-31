@@ -13,12 +13,11 @@ public class RenderSurface extends WritableImage {
 	{
 		super(width, height);
 		surface = new int[height][width];
-
-//		for (int i = 0; i < height; ++i) {
-//			for (int j = 0; j < width; ++j) {
-//				surface[i][j] = (int)(Math.random() * 255);
-//			}
-//		}
+		for (int i = 0; i < surface.length; ++i) {
+			for (int j = 0; j < surface[i].length; ++j) {
+				surface[i][j] = -1;
+			}
+		}
 		insertArray();
 	}
 	
@@ -37,8 +36,14 @@ public class RenderSurface extends WritableImage {
         for(int y = 0; y < height; y++) { 
            for(int x = 0; x < width; x++) { 
         	   double pixel = surface[y][x] / 256.0;
-              //Setting the color to the writable image 
-              writer.setColor(x, y, Color.color(pixel, pixel, pixel));              
+              //Setting the color to the writable image
+			   try {
+				   writer.setColor(x, y, Color.color(pixel, pixel, pixel));
+			   }
+			   catch (IllegalArgumentException ex)
+			   {
+				   writer.setColor(x, y, Color.color(0, 0, 0));
+			   }
            }
         }
     }
@@ -59,5 +64,10 @@ public class RenderSurface extends WritableImage {
 	public void clear()
 	{
 		surface = new int[surface.length][surface[0].length];
+		for (int i = 0; i < surface.length; ++i) {
+			for (int j = 0; j < surface[i].length; ++j) {
+				surface[i][j] = -1;
+			}
+		}
 	}
 }
