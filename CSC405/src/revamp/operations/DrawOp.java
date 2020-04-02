@@ -1,33 +1,44 @@
 package revamp.operations;
 
+import java.util.function.BiPredicate;
+import java.util.function.Predicate;
+
 public class DrawOp
 {
+
+
     /// Ref: Wikipedia - https://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm#Algorithm
-    private static void drawLine(int x0, int y0, int x1, int y1, int[][] framebuffer)
+    private static void line(int x0, int y0, int x1, int y1, int color, int[][] framebuffer)
     {
         //System.out.println("( " + x0 + ", " + y0 + " )" +"( " + x1 + ", " + y1 + " )" );
         if (Math.abs(y1 - y0) < Math.abs(x1 - x0))
         {
             if (x0 > x1)
-                plotLineLow(x1, y1, x0, y0, framebuffer);
+                plotLineLow(x1, y1, x0, y0, color,framebuffer);
             else
-                plotLineLow(x0, y0, x1, y1, framebuffer);
+                plotLineLow(x0, y0, x1, y1, color,framebuffer);
         }
         else {
             if (y0 > y1)
-                plotLineHigh(x1, y1, x0, y0, framebuffer);
+                plotLineHigh(x1, y1, x0, y0, color,framebuffer);
             else
-                plotLineHigh(x0, y0, x1, y1, framebuffer);
+                plotLineHigh(x0, y0, x1, y1, color,framebuffer);
         }
+    }
+
+    // corrects x-axis and y-axis
+    private static void drawLine(int x0, int y0, int x1, int y1, int[][] framebuffer)
+    {
+        line(y0,x0,y1, x1, 255,framebuffer);
     }
 
     // also corrects x-axis and y-axis
     public static void drawLine(double x0, double y0, double x1, double y1, int[][] framebuffer)
     {
-        drawLine((int) y0,(int) x0,(int) y1, (int) x1,framebuffer);
+        line((int) y0,(int) x0,(int) y1, (int) x1,255,framebuffer);
     }
 
-    private static void plotLineLow(int x0, int y0, int x1, int y1,  int[][] framebuffer)
+    private static void plotLineLow(int x0, int y0, int x1, int y1, int color, int[][] framebuffer)
     {
         // delta x and y
         int dx = x1 - x0;
@@ -47,7 +58,7 @@ public class DrawOp
         while(x <= x1)
         {
             try {
-                framebuffer[x][y] = 255;
+                framebuffer[x][y] = color;
             }
             catch (IndexOutOfBoundsException e) {
 
@@ -62,7 +73,7 @@ public class DrawOp
         }
     }
 
-    private static void plotLineHigh(int x0, int y0, int x1, int y1,  int[][] framebuffer)
+    private static void plotLineHigh(int x0, int y0, int x1, int y1, int color, int[][] framebuffer)
     {
         // delta x and y
         int dx = x1 - x0;
@@ -81,7 +92,7 @@ public class DrawOp
         while(y <= y1)
         {
             try {
-                framebuffer[x][y] = 255;
+                framebuffer[x][y] = color;
             }
             catch (IndexOutOfBoundsException e) {
 
@@ -96,58 +107,42 @@ public class DrawOp
         }
     }
 
-    public static void fill(int value, double[][] shape, int[] center, int framebuffer[][])
+    // Added a shape to to reduce the number of calls
+    public static void fill(int value, int shape_top, int framebuffer[][])
     {
-        // finds the
-        // only x and y rows
-        double[] greatestValuesd = new double[] {Double.MIN_VALUE,Double.MIN_VALUE};
-        double[] lowestValuesd = new double[] {Double.MAX_VALUE,Double.MAX_VALUE};
-        for(int i = 0; i < shape.length-2; i++)
-        {
-            for(double c: shape[i])
-            {
-                greatestValuesd[i] =  Double.max(c,greatestValuesd[i]);
-                lowestValuesd[i] =  Double.min(c,lowestValuesd[i]);
-            }
-        }
-        int[] greatestValues = new int[] {(int)greatestValuesd[0],(int)greatestValuesd[1]};
-        int[] lowestValues = new int[] {(int)lowestValuesd[0],(int)lowestValuesd[1]};
-
-        for(int x = lowestValues[0]; x < greatestValues[0]; x++)
-        {
-            for(int y= lowestValues[1]; y < greatestValues[1]; y++)
-            {
-                try {
-
-                    if(BaseOp.isInside(shape,x,y))
-                        framebuffer[y][x] = value;
-                } catch (ArrayIndexOutOfBoundsException ex)
-                    { }
-            }
-        }
-    }
-    public static void fill(int value,  int framebuffer[][])
-    {
-       for(int i = 0; i < framebuffer.length; i++)
+       for(int i = shape_top; i < framebuffer.length; i++)
        {
-           int j = 0;
-           while(j < framebuffer[i].length && framebuffer[i][j] == j++)//left
-           {
-               j++;
-           }
-           if(j == framebuffer[i].length)// not
-               continue;
-           int x0 = j;
-           int y0 = i;
-           while(j > x0 && framebuffer[i][j] == -1)//right
-           {
-               j--;
-           }
-           int x1 = j;
-           int y1 = i;
-           drawLine(x0,y0,x1,y1,framebuffer);
+               int j = 0;
+               while (j < framebuffer[i].length && framebuffer[i][j] == -1)//left
+               {
+                   j++;
+               }
+
+               if (j >= framebuffer[i].length)// not
+                   continue;
+
+               int x0 = j;
+               int y = i;
+
+                do {
+                    j++;
+                }
+                while (j < framebuffer[i].length && framebuffer[i][j] == -1);
+
+               int x1 = j;
+
+               System.out.println(x0+"--->"+x1);
+               drawLine(x0, y,x1, y, framebuffer);
+
        }
+       System.out.println("done");
     }
+
+    public static void fill(int value, int framebuffer[][])
+    {
+        fill(value,0,framebuffer);
+    }
+
         /*
         for(int i = 0; i < face.length; i++)
         {

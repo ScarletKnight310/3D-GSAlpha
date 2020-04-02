@@ -92,6 +92,39 @@ public class Shape
         }
     }
 
+    // renders triangle for assignment
+    public void renderTri(int[][] framebuffer)
+    {
+        // test 1
+        /*
+        DrawOp.drawLine(512,100,256,350, framebuffer);
+        DrawOp.drawLine(256,350, 768,350, framebuffer);
+        DrawOp.drawLine(768,350, 512,100, framebuffer);
+        */
+
+        // for square test 2
+        /*
+         DrawOp.drawLine(100,100,400,100, framebuffer);
+         DrawOp.drawLine(400,100, 400,400, framebuffer);
+         DrawOp.drawLine(400,400, 100,400, framebuffer);
+         DrawOp.drawLine(100,400, 100,100, framebuffer);
+        */
+        
+        // test 3
+        /*
+        DrawOp.drawLine(500,100,200,300, framebuffer);
+        DrawOp.drawLine(200,300, 700,300, framebuffer);
+        DrawOp.drawLine(700,300, 500,100, framebuffer);
+        */
+
+        // test 4
+        DrawOp.drawLine(500,100,300,300, framebuffer);
+        DrawOp.drawLine(300,300, 700,300, framebuffer);
+        DrawOp.drawLine(700,300, 500,100, framebuffer);
+
+        DrawOp.fill(255, 101, framebuffer);
+    }
+
     // gets the shape info
     public ArrayList<double[][]> getShape()
     {
@@ -180,7 +213,7 @@ public class Shape
             }
             DrawOp.drawLine(shapePrt[0][shapePrt[0].length-1],shapePrt[1][shapePrt[0].length-1],shapePrt[0][0],shapePrt[1][0],framebuffer);
             // fill color
-            DrawOp.fill(color, framebuffer);
+           // DrawOp.fill(color, framebuffer);
         }
 
         protected double[] calculateSurfaceNorm()

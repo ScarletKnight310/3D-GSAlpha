@@ -50,11 +50,16 @@ public class RenderSurface extends WritableImage {
     
 	public BufferedImage toImage() 
 	{
+
 		BufferedImage bi = new BufferedImage(surface[0].length, surface.length, BufferedImage.TYPE_INT_RGB);
     	// -- prepare output image
     	for (int i = 0; i < bi.getHeight(); ++i) {
     	    for (int j = 0; j < bi.getWidth(); ++j) {
-    			int pixel =	(surface[i][j] << 16) | (surface[i][j] << 8) | (surface[i][j]);
+				int pixel;
+    	    	if (surface[i][j] == -1)
+    				pixel =	(0 << 16) | (0 << 8) | (0);
+    	    	else
+					pixel =	(surface[i][j] << 16) | (surface[i][j] << 8) | (surface[i][j]);
     			bi.setRGB(j, i, pixel);
     		}
     	}
@@ -70,4 +75,5 @@ public class RenderSurface extends WritableImage {
 			}
 		}
 	}
+
 }

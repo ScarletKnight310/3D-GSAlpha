@@ -30,8 +30,8 @@ import revamp.operations.TransformOp;
 
 public class GraphicsJavaFX extends Application
 {
-    int WIDTH = 600;
-    int HEIGHT = 600;
+    int WIDTH = 900;
+    int HEIGHT = 900;
     Scene mainScene;
     // -- Main container
     BorderPane pane;
@@ -162,7 +162,8 @@ public class GraphicsJavaFX extends Application
 
     // -- Inner class for Controls
     public class ControlBoxInner extends VBox {
-        private Button render;
+        private Button render_cube;
+        private Button render_triangle;
         private Button translate;
         private Button scale;
         private Button rotate;
@@ -222,7 +223,8 @@ public class GraphicsJavaFX extends Application
             //this.setSpacing(5);
             prepareButtonHandlers();
             this.getChildren().add(new Label(" Refresh Scene:"));
-            this.getChildren().add(render);
+            this.getChildren().add(render_cube);
+            this.getChildren().add(render_triangle);
             this.getChildren().add(new Label(" "));
             this.getChildren().add(new Label(" Edit Scene:"));
             this.getChildren().add(translate);
@@ -263,15 +265,30 @@ public class GraphicsJavaFX extends Application
 
         private void prepareButtonHandlers()
         {
-            // graphic
-            render = new Button();
-            render.setText("Render");
-            render.setOnAction(new EventHandler<ActionEvent>() {
+            // graphic cube
+            render_cube = new Button();
+            render_cube.setText("Render Cube");
+            render_cube.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent actionEvent) {
                     // -- process the button
                     graphicsCanvas.renderSurface.clear();
                     shape.render(graphicsCanvas.renderSurface.getSurface());
+                    graphicsCanvas.repaint();
+                    // -- and return focus back to the pane
+                    pane.requestFocus();
+                }
+            });
+
+            // graphic triangle
+            render_triangle = new Button();
+            render_triangle.setText("Render Triangle");
+            render_triangle.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent actionEvent) {
+                    // -- process the button
+                    graphicsCanvas.renderSurface.clear();
+                    shape.renderTri(graphicsCanvas.renderSurface.getSurface());
                     graphicsCanvas.repaint();
                     // -- and return focus back to the pane
                     pane.requestFocus();
