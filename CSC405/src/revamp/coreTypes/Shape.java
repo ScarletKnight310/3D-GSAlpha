@@ -12,7 +12,7 @@ public class Shape
     private Shape2D[] shapeFull;
     public double[] fixedpoint;
     public double[] viewer = new double[] {0,0,-1};
-
+    public boolean fillshape = true;
     // makes def shape "cube"
     public Shape()
     {
@@ -83,6 +83,12 @@ public class Shape
             if(shape.visible)
                 shape.render(framebuffer);
         }
+        if(fillshape) {
+            for (Shape2D shape : shapeFull) {
+                if (shape.visible)
+                    shape.renderOutline(framebuffer);
+            }
+        }
     }
 
     // gets the shape info
@@ -144,9 +150,9 @@ public class Shape
         // shape has the shape
         double[][] shape;
         private double[][] original;
-        int color = 255;
-        int outline = 100;
-        boolean visible = true;
+        int color = 100;
+        int outline = 255;
+        boolean visible = false;
 
         public Shape2D(double[][] shape_part)
         {
@@ -167,22 +173,21 @@ public class Shape
                 original[i][shape[0].length-1] = surfaceNorm[i];
                 original[i][shape[0].length-2] = fixedpoint[i];
             }
-            //setVisible();
+            setVisible();
         }
 
         protected void render(int[][] framebuffer)
         {
             renderOutline(framebuffer);
-            // fill color
-            DrawOp.fill(color, framebuffer);
-            // redraws outline
-            renderOutline(framebuffer);
+            if(fillshape) {
+                DrawOp.fill(color, framebuffer);
+            }
         }
 
         public void setShape2D(double[][] input)
         {
             shape = input;
-            //setVisible();
+            setVisible();
         }
 
         protected void setVisible()
@@ -205,7 +210,7 @@ public class Shape
             setVisible();
         }
 
-        private void renderOutline(int[][] framebuffer)
+        protected void renderOutline(int[][] framebuffer)
         {
             for(int i = 0; i < shape[0].length-3; i++)
             {
