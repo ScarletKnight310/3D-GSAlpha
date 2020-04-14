@@ -2,23 +2,11 @@ package revamp.operations;
 
 import revamp.coreTypes.*;
 
-//import static revamp.operations.VectorOp.VectorOp.matrixMult;
-
 public class TransformOp
 {
     public static final double tresHold = 0.000000001;
 
     public static void translate(Shape shape, double[] point)
-    {
-        Operation(shape,
-                translationM(point[0],point[1],point[2]));
-       /* shape.fixedpoint = new double[]{point[0]+shape.fixedpoint[0],
-                                        point[1]+shape.fixedpoint[1],
-                                        point[2]+shape.fixedpoint[2],
-                                        shape.fixedpoint[3]};*/
-    }
-
-    public static void translate_WithoutFixed(Shape shape, double[] point)
     {
         Operation(shape,
                 translationM(point[0],point[1],point[2]));
@@ -108,8 +96,7 @@ public class TransformOp
             shape.setFace(i, BaseOp.matrixMult(op,shape.getFace(i)));
         }
     }
-    
-    
+
 ////////////////////// all raw operations
     public static double[][] translationM(double x, double y, double z) {
         return new double[][]{

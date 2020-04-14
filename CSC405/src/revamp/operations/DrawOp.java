@@ -1,11 +1,9 @@
 package revamp.operations;
 
-import java.util.function.BiPredicate;
-import java.util.function.Predicate;
+import static revamp.app.RenderSurface.defValue;
 
 public class DrawOp
 {
-
 
     /// Ref: Wikipedia - https://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm#Algorithm
     private static void line(int x0, int y0, int x1, int y1, int color, int[][] framebuffer)
@@ -24,18 +22,6 @@ public class DrawOp
             else
                 plotLineHigh(x0, y0, x1, y1, color,framebuffer);
         }
-    }
-
-    // corrects x-axis and y-axis
-    private static void drawLine(int x0, int y0, int x1, int y1, int[][] framebuffer)
-    {
-        line(y0,x0,y1, x1, 255,framebuffer);
-    }
-
-    // also corrects x-axis and y-axis
-    public static void drawLine(double x0, double y0, double x1, double y1, int[][] framebuffer)
-    {
-        line((int) y0,(int) x0,(int) y1, (int) x1,255,framebuffer);
     }
 
     private static void plotLineLow(int x0, int y0, int x1, int y1, int color, int[][] framebuffer)
@@ -107,51 +93,53 @@ public class DrawOp
         }
     }
 
+    // corrects x-axis and y-axis
+    private static void drawLine(int x0, int y0, int x1, int y1, int color, int[][] framebuffer)
+    {
+        line(y0,x0,y1, x1, color,framebuffer);
+    }
+
+    // also corrects x-axis and y-axis, def color white
+    public static void drawLine(double x0, double y0, double x1, double y1, int[][] framebuffer)
+    {
+        line((int) y0,(int) x0,(int) y1, (int) x1,255,framebuffer);
+    }
+
+    // color option with it
+    public static void drawLine(double x0, double y0, double x1, double y1, int color, int[][] framebuffer)
+    {
+        line((int) y0,(int) x0,(int) y1, (int) x1,color,framebuffer);
+    }
+
     // Added a shape to to reduce the number of calls
     public static void fill(int value, int shape_top, int framebuffer[][])
     {
        for(int i = shape_top; i < framebuffer.length; i++)
        {
                int j = 0;
-               while (j < framebuffer[i].length && framebuffer[i][j] == -1)//left
+               while (j < framebuffer[0].length && framebuffer[i][j] == defValue)//left
                {
                    j++;
                }
 
-               if (j >= framebuffer[i].length)// not
+               if (j >= framebuffer[0].length)// not
                    continue;
 
                int x0 = j;
                int y = i;
-
-                do {
-                    j++;
-                }
-                while (j < framebuffer[i].length && framebuffer[i][j] == -1);
-
+               j = framebuffer[0].length-1;
+               while (j > 0 && framebuffer[i][j] == defValue){
+                   j--;
+               }
                int x1 = j;
 
-               System.out.println(x0+"--->"+x1);
-               drawLine(x0, y,x1, y, framebuffer);
-
+               drawLine(x0, y,x1, y, value, framebuffer);
        }
-       System.out.println("done");
     }
 
     public static void fill(int value, int framebuffer[][])
     {
         fill(value,0,framebuffer);
     }
-
-        /*
-        for(int i = 0; i < face.length; i++)
-        {
-            for(int j = 0; j < face.length; j++)
-            {
-                face[i][j] = value;
-            }
-        }
-        */
-
 }
 

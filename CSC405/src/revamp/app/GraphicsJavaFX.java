@@ -163,14 +163,11 @@ public class GraphicsJavaFX extends Application
     // -- Inner class for Controls
     public class ControlBoxInner extends VBox {
         private Button render_cube;
-        private Button render_triangle;
         private Button translate;
         private Button scale;
         private Button rotate;
 
         private Button reset;
-        private Button SurfaceNorms;
-        //private boolean toggle = false;
         private Button savePNG;
 
         private TextField trans_amt_x;
@@ -224,7 +221,6 @@ public class GraphicsJavaFX extends Application
             prepareButtonHandlers();
             this.getChildren().add(new Label(" Refresh Scene:"));
             this.getChildren().add(render_cube);
-            this.getChildren().add(render_triangle);
             this.getChildren().add(new Label(" "));
             this.getChildren().add(new Label(" Edit Scene:"));
             this.getChildren().add(translate);
@@ -249,7 +245,6 @@ public class GraphicsJavaFX extends Application
             this.getChildren().add(new Label(" "));
             this.getChildren().add(new Label(" Misc:"));
             this.getChildren().add(reset);
-            this.getChildren().add(SurfaceNorms);
             this.getChildren().add(savePNG);
 
 //            animationTimer = new AnimationTimer() {
@@ -274,21 +269,6 @@ public class GraphicsJavaFX extends Application
                     // -- process the button
                     graphicsCanvas.renderSurface.clear();
                     shape.render(graphicsCanvas.renderSurface.getSurface());
-                    graphicsCanvas.repaint();
-                    // -- and return focus back to the pane
-                    pane.requestFocus();
-                }
-            });
-
-            // graphic triangle
-            render_triangle = new Button();
-            render_triangle.setText("Render Triangle");
-            render_triangle.setOnAction(new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent actionEvent) {
-                    // -- process the button
-                    graphicsCanvas.renderSurface.clear();
-                    shape.renderTri(graphicsCanvas.renderSurface.getSurface());
                     graphicsCanvas.repaint();
                     // -- and return focus back to the pane
                     pane.requestFocus();
@@ -353,23 +333,6 @@ public class GraphicsJavaFX extends Application
                 public void handle(ActionEvent actionEvent) {
                     // -- process the button
                     shape.reset();
-                    // -- and return focus back to the pane
-                    pane.requestFocus();
-                }
-            });
-            // Prints surfaceNorms
-            SurfaceNorms = new Button();
-            SurfaceNorms.setText("Print SurfaceNorms");
-            SurfaceNorms.setOnAction(new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent actionEvent) {
-                    // -- process the button
-                    System.out.println("-----------------------------------------------------");
-                    for(int i = 0; i < shape.numOfFaces(); i++)
-                    {
-                        double[] cur = shape.getSurfaceNorm(i);
-                        System.out.println("SN" +(i+1)+ ": "+cur[0] +", "+cur[1]+", "+cur[2]);
-                    }
                     // -- and return focus back to the pane
                     pane.requestFocus();
                 }

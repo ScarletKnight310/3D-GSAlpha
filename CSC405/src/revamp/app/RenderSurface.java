@@ -6,7 +6,8 @@ import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
 
 public class RenderSurface extends WritableImage {
-	
+
+	public static int defValue = -1;
 	private int surface[][];
 
 	public RenderSurface(int width, int height)
@@ -15,7 +16,7 @@ public class RenderSurface extends WritableImage {
 		surface = new int[height][width];
 		for (int i = 0; i < surface.length; ++i) {
 			for (int j = 0; j < surface[i].length; ++j) {
-				surface[i][j] = -1;
+				surface[i][j] = defValue;
 			}
 		}
 		insertArray();
@@ -36,21 +37,17 @@ public class RenderSurface extends WritableImage {
         for(int y = 0; y < height; y++) { 
            for(int x = 0; x < width; x++) { 
         	   double pixel = surface[y][x] / 256.0;
-              //Setting the color to the writable image
-			   try {
+              	// Setting the color to the writable image
+			   if(surface[y][x] != defValue)
 				   writer.setColor(x, y, Color.color(pixel, pixel, pixel));
-			   }
-			   catch (IllegalArgumentException ex)
-			   {
+			   else
 				   writer.setColor(x, y, Color.color(0, 0, 0));
 			   }
            }
-        }
     }
     
 	public BufferedImage toImage() 
 	{
-
 		BufferedImage bi = new BufferedImage(surface[0].length, surface.length, BufferedImage.TYPE_INT_RGB);
     	// -- prepare output image
     	for (int i = 0; i < bi.getHeight(); ++i) {
