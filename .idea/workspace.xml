@@ -67,34 +67,54 @@
     <servers />
   </component>
   <component name="WindowStateProjectService">
+    <state x="787" y="425" width="408" height="237" key="#com.intellij.refactoring.move.moveClassesOrPackages.MoveClassesOrPackagesDialog.classes" timestamp="1587155636208">
+      <screen x="62" y="0" width="1858" height="1080" />
+    </state>
+    <state x="787" y="425" width="408" height="237" key="#com.intellij.refactoring.move.moveClassesOrPackages.MoveClassesOrPackagesDialog.classes/62.0.1858.1080@62.0.1858.1080" timestamp="1587155636208" />
     <state x="771" y="257" key="FileChooserDialogImpl" timestamp="1585175094051">
       <screen x="62" y="0" width="1858" height="1080" />
     </state>
     <state x="771" y="257" key="FileChooserDialogImpl/62.0.1858.1080@62.0.1858.1080" timestamp="1585175094051" />
-    <state width="1815" height="295" key="GridCell.Tab.0.bottom" timestamp="1586895604127">
+    <state width="1815" height="391" key="GridCell.Tab.0.bottom" timestamp="1587155678744">
       <screen x="62" y="0" width="1858" height="1080" />
     </state>
-    <state width="1815" height="295" key="GridCell.Tab.0.bottom/62.0.1858.1080@62.0.1858.1080" timestamp="1586895604127" />
-    <state width="1815" height="295" key="GridCell.Tab.0.center" timestamp="1586895604127">
+    <state width="1815" height="391" key="GridCell.Tab.0.bottom/62.0.1858.1080@62.0.1858.1080" timestamp="1587155678744" />
+    <state width="1815" height="391" key="GridCell.Tab.0.center" timestamp="1587155678743">
       <screen x="62" y="0" width="1858" height="1080" />
     </state>
-    <state width="1815" height="295" key="GridCell.Tab.0.center/62.0.1858.1080@62.0.1858.1080" timestamp="1586895604127" />
-    <state width="1815" height="295" key="GridCell.Tab.0.left" timestamp="1586895604127">
+    <state width="1815" height="391" key="GridCell.Tab.0.center/62.0.1858.1080@62.0.1858.1080" timestamp="1587155678743" />
+    <state width="1815" height="391" key="GridCell.Tab.0.left" timestamp="1587155678743">
       <screen x="62" y="0" width="1858" height="1080" />
     </state>
-    <state width="1815" height="295" key="GridCell.Tab.0.left/62.0.1858.1080@62.0.1858.1080" timestamp="1586895604127" />
-    <state width="1815" height="295" key="GridCell.Tab.0.right" timestamp="1586895604127">
+    <state width="1815" height="391" key="GridCell.Tab.0.left/62.0.1858.1080@62.0.1858.1080" timestamp="1587155678743" />
+    <state width="1815" height="391" key="GridCell.Tab.0.right" timestamp="1587155678744">
       <screen x="62" y="0" width="1858" height="1080" />
     </state>
-    <state width="1815" height="295" key="GridCell.Tab.0.right/62.0.1858.1080@62.0.1858.1080" timestamp="1586895604127" />
+    <state width="1815" height="391" key="GridCell.Tab.0.right/62.0.1858.1080@62.0.1858.1080" timestamp="1587155678744" />
+    <state width="1815" height="364" key="GridCell.Tab.1.bottom" timestamp="1587153302471">
+      <screen x="62" y="0" width="1858" height="1080" />
+    </state>
+    <state width="1815" height="364" key="GridCell.Tab.1.bottom/62.0.1858.1080@62.0.1858.1080" timestamp="1587153302471" />
+    <state width="1815" height="364" key="GridCell.Tab.1.center" timestamp="1587153302471">
+      <screen x="62" y="0" width="1858" height="1080" />
+    </state>
+    <state width="1815" height="364" key="GridCell.Tab.1.center/62.0.1858.1080@62.0.1858.1080" timestamp="1587153302471" />
+    <state width="1815" height="364" key="GridCell.Tab.1.left" timestamp="1587153302471">
+      <screen x="62" y="0" width="1858" height="1080" />
+    </state>
+    <state width="1815" height="364" key="GridCell.Tab.1.left/62.0.1858.1080@62.0.1858.1080" timestamp="1587153302471" />
+    <state width="1815" height="364" key="GridCell.Tab.1.right" timestamp="1587153302471">
+      <screen x="62" y="0" width="1858" height="1080" />
+    </state>
+    <state width="1815" height="364" key="GridCell.Tab.1.right/62.0.1858.1080@62.0.1858.1080" timestamp="1587153302471" />
     <state x="656" y="239" key="NewModule_or_Project.wizard" timestamp="1585175112625">
       <screen x="62" y="0" width="1858" height="1080" />
     </state>
     <state x="656" y="239" key="NewModule_or_Project.wizard/62.0.1858.1080@62.0.1858.1080" timestamp="1585175112625" />
-    <state x="692" y="364" key="com.intellij.ide.util.TipDialog" timestamp="1586814538062">
+    <state x="692" y="364" key="com.intellij.ide.util.TipDialog" timestamp="1587091285231">
       <screen x="62" y="0" width="1858" height="1080" />
     </state>
-    <state x="692" y="364" key="com.intellij.ide.util.TipDialog/62.0.1858.1080@62.0.1858.1080" timestamp="1586814538062" />
+    <state x="692" y="364" key="com.intellij.ide.util.TipDialog/62.0.1858.1080@62.0.1858.1080" timestamp="1587091285231" />
     <state x="654" y="235" width="672" height="678" key="search.everywhere.popup" timestamp="1584582055122">
       <screen x="62" y="0" width="1858" height="1080" />
     </state>

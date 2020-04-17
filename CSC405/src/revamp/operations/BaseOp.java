@@ -27,7 +27,7 @@ public class BaseOp
     {
         double mag = Math.sqrt(Math.pow(A[0],  2) + Math.pow(A[1],  2) + Math.pow(A[2],  2));
         if(Math.abs(mag) < TransformOp.tresHold)
-            throw new IllegalArgumentException("Invalid Axis Rotation");
+           throw new IllegalArgumentException("Invalid Axis Rotation");
         return mag;
     }
 

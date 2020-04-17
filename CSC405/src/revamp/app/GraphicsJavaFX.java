@@ -2,9 +2,9 @@ package revamp.app;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import javax.imageio.ImageIO;
 
-import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -24,6 +24,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 //import revamp.unused.MatrixOpSG;
+import javafx.util.Pair;
 import revamp.coreTypes.*;
 import revamp.operations.TransformOp;
 
@@ -40,15 +41,15 @@ public class GraphicsJavaFX extends Application
     // -- Controls container
     ControlBoxInner controlBox;
     Stage mainStage;
-    Shape shape;
-    AnimationTimer animationTimer;
+    ArrayList<Shape> shapes;
+    ArrayList<Pair<Double,Double>> clickpoints;
 
     @Override
     public void start(Stage mainStage)
     {
         this.mainStage = mainStage;
         // -- Application title
-        mainStage.setTitle("Assignment 6 Java FX");
+        mainStage.setTitle("Assignment 8 Java FX");
         // -- create canvas for drawing
         graphicsCanvas = new GraphicsCanvasInner(WIDTH, HEIGHT);
         // -- construct the controls
@@ -65,7 +66,8 @@ public class GraphicsJavaFX extends Application
         // -- paint the graphics canvas before the initial display
         graphicsCanvas.repaint();
         // set up graph
-        shape = new Shape();
+        shapes = new ArrayList<>();
+        clickpoints = new ArrayList<>();
         // -- display the application window
         mainStage.show();
         // -- set keyboard focus to the pane
@@ -128,8 +130,23 @@ public class GraphicsJavaFX extends Application
                 @Override
                 public void handle(MouseEvent event) {
                     if (event.getButton() == MouseButton.PRIMARY) {
+                        clickpoints.add(new Pair<Double,Double>(event.getX(), event.getY()));
+                        //System.out.println(event.getX()+","+ event.getY());
                     }
                     else if (event.getButton() == MouseButton.SECONDARY) {
+                        if (clickpoints.size() >= 3) {
+                            double[][] tempShape = new double[4][clickpoints.size()];
+                            for (int i = 0; i < clickpoints.size(); i++) {
+                                tempShape[0][i] = clickpoints.get(i).getKey();
+                                tempShape[1][i] = clickpoints.get(i).getValue();
+                                tempShape[2][i] = 1.0;
+                                tempShape[3][i] = 1.0;
+                            }
+                            shapes.add(new Shape(tempShape));
+                            System.out.println("Shape Added/ size ->"+ shapes.size());
+                            clickpoints.clear();
+                            repaint();
+                        }
                     }
                     pane.requestFocus();
                 }
@@ -162,10 +179,11 @@ public class GraphicsJavaFX extends Application
 
     // -- Inner class for Controls
     public class ControlBoxInner extends VBox {
-        private Button render_cube;
+        private Button render_scene;
         private Button translate;
         private Button scale;
         private Button rotate;
+        private Button render_cube;
 
         private Button reset;
         private Button savePNG;
@@ -220,6 +238,9 @@ public class GraphicsJavaFX extends Application
             //this.setSpacing(5);
             prepareButtonHandlers();
             this.getChildren().add(new Label(" Refresh Scene:"));
+            this.getChildren().add(render_scene);
+            this.getChildren().add(new Label(" "));
+            this.getChildren().add(new Label(" Add Objects:"));
             this.getChildren().add(render_cube);
             this.getChildren().add(new Label(" "));
             this.getChildren().add(new Label(" Edit Scene:"));
@@ -246,30 +267,35 @@ public class GraphicsJavaFX extends Application
             this.getChildren().add(new Label(" Misc:"));
             this.getChildren().add(reset);
             this.getChildren().add(savePNG);
-
-//            animationTimer = new AnimationTimer() {
-//                public void handle(long currentNanoTime) {
-//                    graphicsCanvas.renderSurface.clear();
-//                    MatrixOp.rotateZInPlace(shape, Double.parseDouble(degree.getText()));
-//                    shape.render(graphicsCanvas.renderSurface.getSurface());
-//                    graphicsCanvas.repaint();
-//                    pane.requestFocus();
-//                }
-//            };
         }
 
         private void prepareButtonHandlers()
         {
             // graphic cube
-            render_cube = new Button();
-            render_cube.setText("Render Cube");
-            render_cube.setOnAction(new EventHandler<ActionEvent>() {
+            render_scene = new Button();
+            render_scene.setText("Render");
+            render_scene.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent actionEvent) {
                     // -- process the button
                     graphicsCanvas.renderSurface.clear();
-                    shape.render(graphicsCanvas.renderSurface.getSurface());
+                    for(Shape shape: shapes) {
+                        int[][] res = shape.render(graphicsCanvas.renderSurface.empty());
+                        graphicsCanvas.renderSurface.merge(res);
+                    }
                     graphicsCanvas.repaint();
+                    // -- and return focus back to the pane
+                    pane.requestFocus();
+                }
+            });
+
+            render_cube = new Button();
+            render_cube.setText("Add Cube");
+            render_cube.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent actionEvent) {
+                    // -- process the button
+                    shapes.add(new Shape());
                     // -- and return focus back to the pane
                     pane.requestFocus();
                 }
@@ -282,8 +308,8 @@ public class GraphicsJavaFX extends Application
                 @Override
                 public void handle(ActionEvent actionEvent) {
                     // -- process the button
-                    shape.fixedpoint = convertToPoint(trans_amt_x, trans_amt_y, trans_amt_z);
-                    TransformOp.translate(shape, shape.fixedpoint);
+                    shapes.get(0).fixedpoint = convertToPoint(trans_amt_x, trans_amt_y, trans_amt_z);
+                    TransformOp.translate(shapes.get(0), shapes.get(0).fixedpoint);
                     //  fixedPoint.setText(graph.fixedPoint[0] +"," + graph.fixedPoint[1] +","+graph.fixedPoint[2]);
                     // -- and return focus back to the pane
                     pane.requestFocus();
@@ -297,7 +323,7 @@ public class GraphicsJavaFX extends Application
                 @Override
                 public void handle(ActionEvent actionEvent) {
                     // -- process the button
-                    TransformOp.scaleInPlace(shape, convertToPoint(scale_amt_x, scale_amt_y, scale_amt_z));
+                    TransformOp.scaleInPlace(shapes.get(0), convertToPoint(scale_amt_x, scale_amt_y, scale_amt_z));
                     //   fixedPoint.setText(graph.fixedPoint[0] +"," + graph.fixedPoint[1] +","+graph.fixedPoint[2]);
                     // -- and return focus back to the pane
                     pane.requestFocus();
@@ -319,7 +345,7 @@ public class GraphicsJavaFX extends Application
                     {
                         d = 0.0;
                     }
-                    TransformOp.rotateArb(shape, convertToPoint(degree_amt_x, degree_amt_y, degree_amt_z),d);
+                    TransformOp.rotateArb(shapes.get(0), convertToPoint(degree_amt_x, degree_amt_y, degree_amt_z),d);
                     // -- and return focus back to the pane
                     pane.requestFocus();
                 }
@@ -327,12 +353,13 @@ public class GraphicsJavaFX extends Application
 
             // Reset
             reset = new Button();
-            reset.setText("Reset");
+            reset.setText("Clear");
             reset.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent actionEvent) {
                     // -- process the button
-                    shape.reset();
+                    shapes = new ArrayList<>();
+                    // shapes.add(new Shape());
                     // -- and return focus back to the pane
                     pane.requestFocus();
                 }
@@ -360,6 +387,7 @@ public class GraphicsJavaFX extends Application
             });
         }
         /////////////////////
+
         private double[] convertToPoint(TextField x, TextField y, TextField z)
         {
             double[] tryThis = new double[4];

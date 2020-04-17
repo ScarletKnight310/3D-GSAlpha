@@ -75,8 +75,19 @@ public class Shape
         fixedpoint = calculateFixedPoint();
     }
 
+    // FOR A 2D Shape with 3d capabilities
+    public Shape(double[][] face2D)
+    {
+        shapeFull = new Shape2D[]{new Shape2D(face2D, true)};
+        int fpLoc = shapeFull[0].shape.length - 2;
+        fixedpoint = new double[] {shapeFull[0].shape[0][fpLoc],
+                shapeFull[0].shape[1][fpLoc],
+                shapeFull[0].shape[2][fpLoc],
+                shapeFull[0].shape[3][fpLoc]};
+    }
+
     // renders the full shape seen
-    public void render(int[][] framebuffer)
+    public int[][] render(int[][] framebuffer)
     {
         for(Shape2D shape: shapeFull)
         {
@@ -89,6 +100,7 @@ public class Shape
                     shape.renderOutline(framebuffer);
             }
         }
+        return framebuffer;
     }
 
     // gets the shape info
@@ -153,41 +165,66 @@ public class Shape
         int color = 100;
         int outline = 255;
         boolean visible = false;
+        boolean isSingle = false;
 
         public Shape2D(double[][] shape_part)
         {
-            shape = new double[4][shape_part.length + 2];
-            original = new double[4][shape_part.length + 2];
-            double[] fixedpoint = calculateFixedPoint(shape_part);
-            double[] surfaceNorm = calculateSurfaceNorm(shape_part);
-            for(int i = 0; i < shape.length; i++)
-            {
-                for(int j = 0; j < shape_part[0].length; j++)
-                {
-                    shape[i][j] = shape_part[i][j];
-                    original[i][j] = shape_part[i][j];
-                }
-                shape[i][shape[0].length-1] = surfaceNorm[i];
-                shape[i][shape[0].length-2] = fixedpoint[i];
-
-                original[i][shape[0].length-1] = surfaceNorm[i];
-                original[i][shape[0].length-2] = fixedpoint[i];
-            }
-            setVisible();
+            this(shape_part, false);
         }
 
-        protected void render(int[][] framebuffer)
+        public Shape2D(double[][] shape_part, boolean isSing)
+        {
+            shape = new double[4][shape_part[0].length + 2];
+            original = new double[4][shape_part[0].length + 2];
+            double[] fixedpoint = calculateFixedPoint(shape_part);
+
+            if(!isSing) {
+                double[] surfaceNorm = calculateSurfaceNorm(shape_part);
+                for (int i = 0; i < shape.length; i++) {
+                    for (int j = 0; j < shape_part[0].length; j++) {
+                        shape[i][j] = shape_part[i][j];
+                        original[i][j] = shape_part[i][j];
+                    }
+                    shape[i][shape[0].length - 1] = surfaceNorm[i];
+                    shape[i][shape[0].length - 2] = fixedpoint[i];
+
+                    original[i][shape[0].length - 1] = surfaceNorm[i];
+                    original[i][shape[0].length - 2] = fixedpoint[i];
+                }
+                setVisible();
+            }
+            else
+            {
+                double[] surfaceNorm = new double[]{0.0, 0.0, 0.0, 1.0};
+                for (int i = 0; i < shape.length; i++) {
+                    for (int j = 0; j < shape_part[0].length; j++) {
+                        shape[i][j] = shape_part[i][j];
+                        original[i][j] = shape_part[i][j];
+                    }
+                    shape[i][shape[0].length - 1] = surfaceNorm[i];
+                    shape[i][shape[0].length - 2] = fixedpoint[i];
+
+                    original[i][shape[0].length - 1] = surfaceNorm[i];
+                    original[i][shape[0].length - 2] = fixedpoint[i];
+                }
+                visible = true;
+            }
+        }
+
+        protected int[][] render(int[][] framebuffer)
         {
             renderOutline(framebuffer);
             if(fillshape) {
                 DrawOp.fill(color, framebuffer);
             }
+            return framebuffer;
         }
 
         public void setShape2D(double[][] input)
         {
             shape = input;
-            setVisible();
+            if(!isSingle)
+                setVisible();
         }
 
         protected void setVisible()
@@ -212,22 +249,28 @@ public class Shape
 
         protected void renderOutline(int[][] framebuffer)
         {
-            for(int i = 0; i < shape[0].length-3; i++)
-            {
-                DrawOp.drawLine(shape[0][i],shape[1][i],shape[0][i+1],shape[1][i+1], outline, framebuffer);
+            int shp_pointLen = shape[0].length-3;
+
+            for (int i = 0; i < shp_pointLen; i++) {
+                DrawOp.drawLine(shape[0][i], shape[1][i], shape[0][i + 1], shape[1][i + 1], outline, framebuffer);
+                System.out.println(i +", "+(i+1));
             }
-            DrawOp.drawLine(shape[0][shape[0].length-3],shape[1][shape[0].length-3],shape[0][0],shape[1][0], outline, framebuffer);
+            DrawOp.drawLine(shape[0][shp_pointLen], shape[1][shp_pointLen], shape[0][0], shape[1][0], outline, framebuffer);
+            System.out.println(shp_pointLen +", "+shape[0].length+"----------");
         }
 
         protected double[] calculateSurfaceNorm(double[][] shapePrt)
         {
-            double[] A = new double[] {shapePrt[0][1] - shapePrt[0][0],
-                                       shapePrt[1][1] - shapePrt[1][0],
-                                       shapePrt[2][1] - shapePrt[2][0]};
-            double[] B = new double[] {shapePrt[0][3] - shapePrt[0][0],
-                                       shapePrt[1][3] - shapePrt[1][0],
-                                       shapePrt[2][3] - shapePrt[2][0]};
-            double[] unit = BaseOp.unitVector(BaseOp.cross(A,B));
+            double[] U;
+            double[] V;
+            U = new double[]{shapePrt[0][1] - shapePrt[0][0],
+                    shapePrt[1][1] - shapePrt[1][0],
+                    shapePrt[2][1] - shapePrt[2][0]};
+            V = new double[]{shapePrt[0][3] - shapePrt[0][0],
+                    shapePrt[1][3] - shapePrt[1][0],
+                    shapePrt[2][3] - shapePrt[2][0]};
+
+            double[] unit = BaseOp.unitVector(BaseOp.cross(U,V));
             return new double[]{unit[0], unit[1], unit[2], 1.0};
         }
 

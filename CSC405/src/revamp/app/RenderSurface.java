@@ -68,9 +68,29 @@ public class RenderSurface extends WritableImage {
 		surface = new int[surface.length][surface[0].length];
 		for (int i = 0; i < surface.length; ++i) {
 			for (int j = 0; j < surface[i].length; ++j) {
-				surface[i][j] = -1;
+				surface[i][j] = defValue;
 			}
 		}
 	}
 
+	public void merge(int[][] addOn)
+	{
+		for (int i = 0; i < surface.length; ++i) {
+			for (int j = 0; j < surface[i].length; ++j) {
+				if(addOn[i][j] != defValue)
+					surface[i][j] = addOn[i][j];
+			}
+		}
+	}
+
+	public int[][] empty()
+	{
+		int[][] result = new int[surface.length][surface[0].length];
+		for (int i = 0; i < surface.length; ++i) {
+			for (int j = 0; j < surface[i].length; ++j) {
+				result[i][j] = defValue;
+			}
+		}
+		return result;
+	}
 }
