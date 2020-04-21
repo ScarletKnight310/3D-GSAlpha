@@ -8,7 +8,6 @@ import java.util.ArrayList;
 
 public class Shape
 {
-
     private Shape2D[] shapeFull;
     public double[] fixedpoint;
     public double[] viewer = new double[] {0,0,-1};
@@ -60,6 +59,10 @@ public class Shape
                         {1.0, 1.0, 1.0, 1.0}
                 })
         };
+        int c = 42;
+        for (int i = 0; i < shapeFull.length; i++) {
+            shapeFull[i].color = i * c;
+        }
         fixedpoint = new double[]{0.0,0.0,0.0,1.0};
         // fixedpoint = calculateFixedPoint();
     }
@@ -91,13 +94,9 @@ public class Shape
     {
         for(Shape2D shape: shapeFull)
         {
-            if(shape.visible)
-                shape.render(framebuffer);
-        }
-        if(fillshape) {
-            for (Shape2D shape : shapeFull) {
-                if (shape.visible)
-                    shape.renderOutline(framebuffer);
+            if(shape.visible) {
+                framebuffer = DrawOp.merge(framebuffer,
+                        shape.render(DrawOp.empty(framebuffer.length,framebuffer[0].length)));
             }
         }
         return framebuffer;
@@ -155,6 +154,12 @@ public class Shape
     public int numOfFaces()
     {
         return shapeFull.length;
+    }
+
+    public void setColor(int input)
+    {
+        if(input >= 0 && input < 256)
+            shapeFull[0].color = input;
     }
 
     public class Shape2D
@@ -216,6 +221,7 @@ public class Shape
             renderOutline(framebuffer);
             if(fillshape) {
                 DrawOp.fill(color, framebuffer);
+                renderOutline(framebuffer);
             }
             return framebuffer;
         }
@@ -256,7 +262,6 @@ public class Shape
                 System.out.println(i +", "+(i+1));
             }
             DrawOp.drawLine(shape[0][shp_pointLen], shape[1][shp_pointLen], shape[0][0], shape[1][0], outline, framebuffer);
-            System.out.println(shp_pointLen +", "+shape[0].length+"----------");
         }
 
         protected double[] calculateSurfaceNorm(double[][] shapePrt)

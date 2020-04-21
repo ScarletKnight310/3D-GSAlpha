@@ -141,5 +141,27 @@ public class DrawOp
     {
         fill(value,0,framebuffer);
     }
+
+    public static int[][] empty(int WIDTH, int HEIGHT)
+    {
+        int[][] result = new int[HEIGHT][WIDTH];
+        for (int i = 0; i < HEIGHT; ++i) {
+            for (int j = 0; j < WIDTH; ++j) {
+                result[i][j] = defValue;
+            }
+        }
+        return result;
+    }
+
+    public static int[][] merge(int[][] a,int[][] b)
+    {
+        for (int i = 0; i < a.length; ++i) {
+            for (int j = 0; j < a[i].length; ++j) {
+                if(b[i][j] != defValue)
+                    a[i][j] = b[i][j];
+            }
+        }
+        return a;
+    }
 }
 

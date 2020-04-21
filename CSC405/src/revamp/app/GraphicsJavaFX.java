@@ -49,7 +49,7 @@ public class GraphicsJavaFX extends Application
     {
         this.mainStage = mainStage;
         // -- Application title
-        mainStage.setTitle("Assignment 8 Java FX");
+        mainStage.setTitle("Assignment 9 Java FX");
         // -- create canvas for drawing
         graphicsCanvas = new GraphicsCanvasInner(WIDTH, HEIGHT);
         // -- construct the controls
@@ -145,6 +145,12 @@ public class GraphicsJavaFX extends Application
                             shapes.add(new Shape(tempShape));
                             System.out.println("Shape Added/ size ->"+ shapes.size());
                             clickpoints.clear();
+
+                            renderSurface.clear();
+                            for(Shape shape: shapes) {
+                                int[][] res = shape.render(renderSurface.empty());
+                                renderSurface.merge(res);
+                            }
                             repaint();
                         }
                     }
@@ -179,7 +185,7 @@ public class GraphicsJavaFX extends Application
 
     // -- Inner class for Controls
     public class ControlBoxInner extends VBox {
-        private Button render_scene;
+        private Button change_color;
         private Button translate;
         private Button scale;
         private Button rotate;
@@ -200,6 +206,7 @@ public class GraphicsJavaFX extends Application
         private TextField degree_amt_y;
         private TextField degree_amt_z;
         private TextField degree;
+        private TextField color;
         private FileChooser fileChooser;
 
         public ControlBoxInner()
@@ -233,17 +240,15 @@ public class GraphicsJavaFX extends Application
             degree_amt_z.setMaxWidth(50);
             degree = new TextField("45");
             degree.setMaxWidth(50);
-
+            color = new TextField("45");
+            color.setMaxWidth(50);
             // -- set up buttons
             //this.setSpacing(5);
             prepareButtonHandlers();
-            this.getChildren().add(new Label(" Refresh Scene:"));
-            this.getChildren().add(render_scene);
-            this.getChildren().add(new Label(" "));
-            this.getChildren().add(new Label(" Add Objects:"));
+            this.getChildren().add(new Label(" Add Shapes:"));
             this.getChildren().add(render_cube);
             this.getChildren().add(new Label(" "));
-            this.getChildren().add(new Label(" Edit Scene:"));
+            this.getChildren().add(new Label(" Edit Shapes:"));
             this.getChildren().add(translate);
             //this.getChildren().add(new Label("(x, y, z)"));
             this.getChildren().add(trans_amt_x);
@@ -264,6 +269,10 @@ public class GraphicsJavaFX extends Application
             this.getChildren().add(new Label(" Degrees"));
             this.getChildren().add(degree);
             this.getChildren().add(new Label(" "));
+            this.getChildren().add(new Label(" Color"));
+            this.getChildren().add(change_color);
+            this.getChildren().add(color);
+            this.getChildren().add(new Label(" "));
             this.getChildren().add(new Label(" Misc:"));
             this.getChildren().add(reset);
             this.getChildren().add(savePNG);
@@ -272,18 +281,20 @@ public class GraphicsJavaFX extends Application
         private void prepareButtonHandlers()
         {
             // graphic cube
-            render_scene = new Button();
-            render_scene.setText("Render");
-            render_scene.setOnAction(new EventHandler<ActionEvent>() {
+            change_color = new Button();
+            change_color.setText("Change Color");
+            change_color.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent actionEvent) {
                     // -- process the button
-                    graphicsCanvas.renderSurface.clear();
-                    for(Shape shape: shapes) {
-                        int[][] res = shape.render(graphicsCanvas.renderSurface.empty());
-                        graphicsCanvas.renderSurface.merge(res);
+                    try {
+                        shapes.get(shapes.size() - 1).setColor(Integer.parseInt(color.getText()));
+                        renderScene();
                     }
-                    graphicsCanvas.repaint();
+                    catch (NumberFormatException ex)
+                    {
+
+                    }
                     // -- and return focus back to the pane
                     pane.requestFocus();
                 }
@@ -296,6 +307,7 @@ public class GraphicsJavaFX extends Application
                 public void handle(ActionEvent actionEvent) {
                     // -- process the button
                     shapes.add(new Shape());
+                    renderScene();
                     // -- and return focus back to the pane
                     pane.requestFocus();
                 }
@@ -310,6 +322,7 @@ public class GraphicsJavaFX extends Application
                     // -- process the button
                     shapes.get(0).fixedpoint = convertToPoint(trans_amt_x, trans_amt_y, trans_amt_z);
                     TransformOp.translate(shapes.get(0), shapes.get(0).fixedpoint);
+                    renderScene();
                     //  fixedPoint.setText(graph.fixedPoint[0] +"," + graph.fixedPoint[1] +","+graph.fixedPoint[2]);
                     // -- and return focus back to the pane
                     pane.requestFocus();
@@ -324,6 +337,7 @@ public class GraphicsJavaFX extends Application
                 public void handle(ActionEvent actionEvent) {
                     // -- process the button
                     TransformOp.scaleInPlace(shapes.get(0), convertToPoint(scale_amt_x, scale_amt_y, scale_amt_z));
+                    renderScene();
                     //   fixedPoint.setText(graph.fixedPoint[0] +"," + graph.fixedPoint[1] +","+graph.fixedPoint[2]);
                     // -- and return focus back to the pane
                     pane.requestFocus();
@@ -346,6 +360,7 @@ public class GraphicsJavaFX extends Application
                         d = 0.0;
                     }
                     TransformOp.rotateArb(shapes.get(0), convertToPoint(degree_amt_x, degree_amt_y, degree_amt_z),d);
+                    renderScene();
                     // -- and return focus back to the pane
                     pane.requestFocus();
                 }
@@ -359,7 +374,7 @@ public class GraphicsJavaFX extends Application
                 public void handle(ActionEvent actionEvent) {
                     // -- process the button
                     shapes = new ArrayList<>();
-                    // shapes.add(new Shape());
+                    renderScene();
                     // -- and return focus back to the pane
                     pane.requestFocus();
                 }
@@ -406,6 +421,16 @@ public class GraphicsJavaFX extends Application
 
             tryThis[3] = 1.0;
             return tryThis;
+        }
+
+        public void renderScene()
+        {
+            graphicsCanvas.renderSurface.clear();
+            for(Shape shape: shapes) {
+                int[][] res = shape.render(graphicsCanvas.renderSurface.empty());
+                graphicsCanvas.renderSurface.merge(res);
+            }
+            graphicsCanvas.repaint();
         }
     }
 }
