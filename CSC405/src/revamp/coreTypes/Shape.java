@@ -59,12 +59,10 @@ public class Shape
                         {1.0, 1.0, 1.0, 1.0}
                 })
         };
-        int c = 42;
         for (int i = 0; i < shapeFull.length; i++) {
-            shapeFull[i].color = i * c;
+            shapeFull[i].color = new ColorT(50 , 50, 50);
         }
         fixedpoint = new double[]{0.0,0.0,0.0,1.0};
-        // fixedpoint = calculateFixedPoint();
     }
 
     // takes an arraylist of 2d shape cords and makes a 3d (or 2d) shape
@@ -90,7 +88,7 @@ public class Shape
     }
 
     // renders the full shape seen
-    public int[][] render(int[][] framebuffer)
+    public ColorT[][] render(ColorT[][] framebuffer)
     {
         for(Shape2D shape: shapeFull)
         {
@@ -156,10 +154,18 @@ public class Shape
         return shapeFull.length;
     }
 
-    public void setColor(int input)
+    public void setColor(ColorT input)
     {
-        if(input >= 0 && input < 256)
+        if(input.isValid() && (shapeFull.length == 1))
             shapeFull[0].color = input;
+        else if(input.isValid() && shapeFull.length > 1) {
+            int rRate = input.r / shapeFull.length;
+            int gRate = input.g / shapeFull.length;
+            int bRate = input.b / shapeFull.length;
+            for (int i = 0; i < shapeFull.length; i++) {
+                shapeFull[i].color = new ColorT(i * rRate , i * gRate, i * bRate);
+            }
+        }
     }
 
     public class Shape2D
@@ -167,8 +173,9 @@ public class Shape
         // shape has the shape
         double[][] shape;
         private double[][] original;
-        int color = 100;
-        int outline = 255;
+        ColorT color = new ColorT(100,100,100);
+        ColorT outline = new ColorT(255, 255, 255);
+
         boolean visible = false;
         boolean isSingle = false;
 
@@ -216,7 +223,7 @@ public class Shape
             }
         }
 
-        protected int[][] render(int[][] framebuffer)
+        protected ColorT[][] render(ColorT[][] framebuffer)
         {
             renderOutline(framebuffer);
             if(fillshape) {
@@ -253,7 +260,7 @@ public class Shape
             setVisible();
         }
 
-        protected void renderOutline(int[][] framebuffer)
+        protected void renderOutline(ColorT[][] framebuffer)
         {
             int shp_pointLen = shape[0].length-3;
 

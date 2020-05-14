@@ -3,6 +3,7 @@ package revamp.app;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import javax.imageio.ImageIO;
 
 import javafx.application.Application;
@@ -12,6 +13,7 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
@@ -26,6 +28,7 @@ import javafx.stage.Stage;
 //import revamp.unused.MatrixOpSG;
 import javafx.util.Pair;
 import revamp.coreTypes.*;
+import revamp.operations.BaseOp;
 import revamp.operations.TransformOp;
 
 
@@ -43,13 +46,15 @@ public class GraphicsJavaFX extends Application
     Stage mainStage;
     ArrayList<Shape> shapes;
     ArrayList<Pair<Double,Double>> clickpoints;
+    private CheckBox createShapes;
+    private Pair<Double,Double> selcPoint;
 
     @Override
     public void start(Stage mainStage)
     {
         this.mainStage = mainStage;
         // -- Application title
-        mainStage.setTitle("Assignment 9 Java FX");
+        mainStage.setTitle("Graphics - Java FX");
         // -- create canvas for drawing
         graphicsCanvas = new GraphicsCanvasInner(WIDTH, HEIGHT);
         // -- construct the controls
@@ -129,29 +134,48 @@ public class GraphicsJavaFX extends Application
             this.setOnMousePressed(new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent event) {
-                    if (event.getButton() == MouseButton.PRIMARY) {
-                        clickpoints.add(new Pair<Double,Double>(event.getX(), event.getY()));
-                        //System.out.println(event.getX()+","+ event.getY());
-                    }
-                    else if (event.getButton() == MouseButton.SECONDARY) {
-                        if (clickpoints.size() >= 3) {
-                            double[][] tempShape = new double[4][clickpoints.size()];
-                            for (int i = 0; i < clickpoints.size(); i++) {
-                                tempShape[0][i] = clickpoints.get(i).getKey();
-                                tempShape[1][i] = clickpoints.get(i).getValue();
-                                tempShape[2][i] = 1.0;
-                                tempShape[3][i] = 1.0;
-                            }
-                            shapes.add(new Shape(tempShape));
-                            System.out.println("Shape Added/ size ->"+ shapes.size());
-                            clickpoints.clear();
+                    if(createShapes.isSelected()){
+                        if (event.getButton() == MouseButton.PRIMARY) {
+                            clickpoints.add(new Pair<Double,Double>(event.getX(), event.getY()));
+                            //System.out.println(event.getX()+","+ event.getY());
+                        }
+                        else if (event.getButton() == MouseButton.SECONDARY) {
+                            if (clickpoints.size() >= 3) {
+                                double[][] tempShape = new double[4][clickpoints.size()];
+                                for (int i = 0; i < clickpoints.size(); i++) {
+                                    tempShape[0][i] = clickpoints.get(i).getKey();
+                                    tempShape[1][i] = clickpoints.get(i).getValue();
+                                    tempShape[2][i] = 1.0;
+                                    tempShape[3][i] = 1.0;
+                                }
+                                shapes.add(new Shape(tempShape));
+                                System.out.println("Shape Added/ size ->"+ shapes.size());
+                                clickpoints.clear();
 
-                            renderSurface.clear();
-                            for(Shape shape: shapes) {
-                                int[][] res = shape.render(renderSurface.empty());
-                                renderSurface.merge(res);
+                                renderSurface.clear();
+                                for(Shape shape: shapes) {
+                                    ColorT[][] res = shape.render(renderSurface.empty());
+                                    renderSurface.merge(res);
+                                }
+                                repaint();
                             }
-                            repaint();
+                        }
+                    }
+                    else {
+                        clickpoints.clear();
+                        if (event.getButton() == MouseButton.PRIMARY) {
+                            selcPoint = new Pair<Double,Double>(event.getX(), event.getY());
+                            System.out.println("Selected");
+                            int closestShape = -1;
+                            double dist = Double.MAX_VALUE;
+                            for(int i = 0; i < shapes.size(); i++){
+                                double curDist = BaseOp.distance(selcPoint.getKey(),selcPoint.getValue(),shapes.get(i).fixedpoint[0],shapes.get(i).fixedpoint[1]);
+                                if(dist > curDist){
+                                    dist = curDist;
+                                    closestShape = i;
+                                }
+                            }
+                            Collections.swap(shapes,closestShape,0);
                         }
                     }
                     pane.requestFocus();
@@ -202,11 +226,15 @@ public class GraphicsJavaFX extends Application
         private TextField scale_amt_y;
         private TextField scale_amt_z;
 
+        private TextField color_r;
+        private TextField color_b;
+        private TextField color_g;
+
         private TextField degree_amt_x;
         private TextField degree_amt_y;
         private TextField degree_amt_z;
         private TextField degree;
-        private TextField color;
+
         private FileChooser fileChooser;
 
         public ControlBoxInner()
@@ -216,6 +244,9 @@ public class GraphicsJavaFX extends Application
             fileChooser = new FileChooser();
             FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Image Files", ".png");
             fileChooser.getExtensionFilters().add(extFilter);
+            createShapes = new CheckBox("Create Shape");
+            createShapes.setSelected(true);
+
             // fixedPoint = new TextField("0,0,0");
             //fixedPoint.setMaxWidth(100);
             trans_amt_x = new TextField("x");
@@ -238,15 +269,20 @@ public class GraphicsJavaFX extends Application
             degree_amt_y.setMaxWidth(50);
             degree_amt_z = new TextField("z");
             degree_amt_z.setMaxWidth(50);
-            degree = new TextField("45");
+            color_r = new TextField("r");
+            color_r.setMaxWidth(50);
+            color_g = new TextField("g");
+            color_g.setMaxWidth(50);
+            color_b = new TextField("b");
+            color_b.setMaxWidth(50);
+            degree = new TextField("0");
             degree.setMaxWidth(50);
-            color = new TextField("45");
-            color.setMaxWidth(50);
             // -- set up buttons
             //this.setSpacing(5);
             prepareButtonHandlers();
             this.getChildren().add(new Label(" Add Shapes:"));
             this.getChildren().add(render_cube);
+            this.getChildren().add(createShapes);
             this.getChildren().add(new Label(" "));
             this.getChildren().add(new Label(" Edit Shapes:"));
             this.getChildren().add(translate);
@@ -271,7 +307,9 @@ public class GraphicsJavaFX extends Application
             this.getChildren().add(new Label(" "));
             this.getChildren().add(new Label(" Color"));
             this.getChildren().add(change_color);
-            this.getChildren().add(color);
+            this.getChildren().add(color_r);
+            this.getChildren().add(color_g);
+            this.getChildren().add(color_b);
             this.getChildren().add(new Label(" "));
             this.getChildren().add(new Label(" Misc:"));
             this.getChildren().add(reset);
@@ -288,14 +326,16 @@ public class GraphicsJavaFX extends Application
                 public void handle(ActionEvent actionEvent) {
                     // -- process the button
                     try {
-                        shapes.get(shapes.size() - 1).setColor(Integer.parseInt(color.getText()));
-                        renderScene();
+                        shapes.get(shapes.size() - 1).setColor(new ColorT(Integer.parseInt(color_r.getText()),
+                                Integer.parseInt(color_g.getText()),
+                                Integer.parseInt(color_b.getText())));
                     }
                     catch (NumberFormatException ex)
                     {
-
+                        shapes.get(shapes.size() - 1).setColor(new ColorT(255,255,255));
                     }
                     // -- and return focus back to the pane
+                    renderScene();
                     pane.requestFocus();
                 }
             });
@@ -427,7 +467,7 @@ public class GraphicsJavaFX extends Application
         {
             graphicsCanvas.renderSurface.clear();
             for(Shape shape: shapes) {
-                int[][] res = shape.render(graphicsCanvas.renderSurface.empty());
+                ColorT[][] res = shape.render(graphicsCanvas.renderSurface.empty());
                 graphicsCanvas.renderSurface.merge(res);
             }
             graphicsCanvas.repaint();

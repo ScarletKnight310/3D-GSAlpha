@@ -1,12 +1,14 @@
 package revamp.operations;
 
+import revamp.coreTypes.ColorT;
+
 import static revamp.app.RenderSurface.defValue;
 
 public class DrawOp
 {
 
     /// Ref: Wikipedia - https://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm#Algorithm
-    private static void line(int x0, int y0, int x1, int y1, int color, int[][] framebuffer)
+    private static void line(int x0, int y0, int x1, int y1, ColorT color, ColorT[][] framebuffer)
     {
         //System.out.println("( " + x0 + ", " + y0 + " )" +"( " + x1 + ", " + y1 + " )" );
         if (Math.abs(y1 - y0) < Math.abs(x1 - x0))
@@ -24,7 +26,7 @@ public class DrawOp
         }
     }
 
-    private static void plotLineLow(int x0, int y0, int x1, int y1, int color, int[][] framebuffer)
+    private static void plotLineLow(int x0, int y0, int x1, int y1, ColorT color, ColorT[][] framebuffer)
     {
         // delta x and y
         int dx = x1 - x0;
@@ -59,7 +61,7 @@ public class DrawOp
         }
     }
 
-    private static void plotLineHigh(int x0, int y0, int x1, int y1, int color, int[][] framebuffer)
+    private static void plotLineHigh(int x0, int y0, int x1, int y1, ColorT color, ColorT[][] framebuffer)
     {
         // delta x and y
         int dx = x1 - x0;
@@ -94,30 +96,30 @@ public class DrawOp
     }
 
     // corrects x-axis and y-axis
-    private static void drawLine(int x0, int y0, int x1, int y1, int color, int[][] framebuffer)
+    private static void drawLine(int x0, int y0, int x1, int y1, ColorT color, ColorT[][] framebuffer)
     {
         line(y0,x0,y1, x1, color,framebuffer);
     }
 
     // also corrects x-axis and y-axis, def color white
-    public static void drawLine(double x0, double y0, double x1, double y1, int[][] framebuffer)
+    public static void drawLine(double x0, double y0, double x1, double y1, ColorT[][] framebuffer)
     {
-        line((int) y0,(int) x0,(int) y1, (int) x1,255,framebuffer);
+        line((int) y0,(int) x0,(int) y1, (int) x1,new ColorT(255, 255, 255),framebuffer);
     }
 
     // color option with it
-    public static void drawLine(double x0, double y0, double x1, double y1, int color, int[][] framebuffer)
+    public static void drawLine(double x0, double y0, double x1, double y1, ColorT color, ColorT[][] framebuffer)
     {
         line((int) y0,(int) x0,(int) y1, (int) x1,color,framebuffer);
     }
 
     // Added a shape to to reduce the number of calls
-    public static void fill(int value, int shape_top, int framebuffer[][])
+    public static void fill(ColorT value, int shape_top, ColorT[][] framebuffer)
     {
        for(int i = shape_top; i < framebuffer.length; i++)
        {
                int j = 0;
-               while (j < framebuffer[0].length && framebuffer[i][j] == defValue)//left
+               while (j < framebuffer[0].length && framebuffer[i][j].isDef())//left
                {
                    j++;
                }
@@ -128,7 +130,7 @@ public class DrawOp
                int x0 = j;
                int y = i;
                j = framebuffer[0].length-1;
-               while (j > 0 && framebuffer[i][j] == defValue){
+               while (j > 0 && framebuffer[i][j].isDef()){
                    j--;
                }
                int x1 = j;
@@ -137,27 +139,27 @@ public class DrawOp
        }
     }
 
-    public static void fill(int value, int framebuffer[][])
+    public static void fill(ColorT value, ColorT[][] framebuffer)
     {
         fill(value,0,framebuffer);
     }
 
-    public static int[][] empty(int WIDTH, int HEIGHT)
+    public static ColorT[][] empty(int WIDTH, int HEIGHT)
     {
-        int[][] result = new int[HEIGHT][WIDTH];
+        ColorT[][] result = new ColorT[HEIGHT][WIDTH];
         for (int i = 0; i < HEIGHT; ++i) {
             for (int j = 0; j < WIDTH; ++j) {
-                result[i][j] = defValue;
+                result[i][j] = new ColorT();
             }
         }
         return result;
     }
 
-    public static int[][] merge(int[][] a,int[][] b)
+    public static ColorT[][] merge(ColorT[][] a, ColorT[][] b)
     {
         for (int i = 0; i < a.length; ++i) {
             for (int j = 0; j < a[i].length; ++j) {
-                if(b[i][j] != defValue)
+                if(!b[i][j].isDef())
                     a[i][j] = b[i][j];
             }
         }
