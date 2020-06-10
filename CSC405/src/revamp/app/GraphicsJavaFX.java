@@ -48,6 +48,7 @@ public class GraphicsJavaFX extends Application
     ArrayList<Pair<Double,Double>> clickpoints;
     private CheckBox createShapes;
     private Pair<Double,Double> selcPoint;
+    private Label curAction;
 
     @Override
     public void start(Stage mainStage)
@@ -136,10 +137,12 @@ public class GraphicsJavaFX extends Application
                 public void handle(MouseEvent event) {
                     if(createShapes.isSelected()){
                         if (event.getButton() == MouseButton.PRIMARY) {
+                            curAction.setText("Added Point");
                             clickpoints.add(new Pair<Double,Double>(event.getX(), event.getY()));
                             //System.out.println(event.getX()+","+ event.getY());
                         }
                         else if (event.getButton() == MouseButton.SECONDARY) {
+                            curAction.setText("Created Shape");
                             if (clickpoints.size() >= 3) {
                                 double[][] tempShape = new double[4][clickpoints.size()];
                                 for (int i = 0; i < clickpoints.size(); i++) {
@@ -149,7 +152,6 @@ public class GraphicsJavaFX extends Application
                                     tempShape[3][i] = 1.0;
                                 }
                                 shapes.add(new Shape(tempShape));
-                                System.out.println("Shape Added/ size ->"+ shapes.size());
                                 clickpoints.clear();
 
                                 renderSurface.clear();
@@ -166,6 +168,7 @@ public class GraphicsJavaFX extends Application
                         if (event.getButton() == MouseButton.PRIMARY) {
                             selcPoint = new Pair<Double,Double>(event.getX(), event.getY());
                             System.out.println("Selected");
+                            curAction.setText("Selected Shape");
                             int closestShape = -1;
                             double dist = Double.MAX_VALUE;
                             for(int i = 0; i < shapes.size(); i++){
@@ -277,6 +280,7 @@ public class GraphicsJavaFX extends Application
             color_b.setMaxWidth(50);
             degree = new TextField("0");
             degree.setMaxWidth(50);
+            curAction = new Label("StartedApp");
             // -- set up buttons
             //this.setSpacing(5);
             prepareButtonHandlers();
@@ -314,6 +318,8 @@ public class GraphicsJavaFX extends Application
             this.getChildren().add(new Label(" Misc:"));
             this.getChildren().add(reset);
             this.getChildren().add(savePNG);
+            this.getChildren().add(new Label(" "));
+            this.getChildren().add(curAction);
         }
 
         private void prepareButtonHandlers()
@@ -326,15 +332,16 @@ public class GraphicsJavaFX extends Application
                 public void handle(ActionEvent actionEvent) {
                     // -- process the button
                     try {
-                        shapes.get(shapes.size() - 1).setColor(new ColorT(Integer.parseInt(color_r.getText()),
+                        shapes.get(0).setColor(new ColorT(Integer.parseInt(color_r.getText()),
                                 Integer.parseInt(color_g.getText()),
                                 Integer.parseInt(color_b.getText())));
                     }
                     catch (NumberFormatException ex)
                     {
-                        shapes.get(shapes.size() - 1).setColor(new ColorT(255,255,255));
+                        shapes.get(0).setColor(new ColorT(255,255,255));
                     }
                     // -- and return focus back to the pane
+                    curAction.setText("Changed Color");
                     renderScene();
                     pane.requestFocus();
                 }
@@ -348,6 +355,7 @@ public class GraphicsJavaFX extends Application
                     // -- process the button
                     shapes.add(new Shape());
                     renderScene();
+                    curAction.setText("Added Cube");
                     // -- and return focus back to the pane
                     pane.requestFocus();
                 }
@@ -363,6 +371,7 @@ public class GraphicsJavaFX extends Application
                     shapes.get(0).fixedpoint = convertToPoint(trans_amt_x, trans_amt_y, trans_amt_z);
                     TransformOp.translate(shapes.get(0), shapes.get(0).fixedpoint);
                     renderScene();
+                    curAction.setText("Translated Shape");
                     //  fixedPoint.setText(graph.fixedPoint[0] +"," + graph.fixedPoint[1] +","+graph.fixedPoint[2]);
                     // -- and return focus back to the pane
                     pane.requestFocus();
@@ -378,6 +387,7 @@ public class GraphicsJavaFX extends Application
                     // -- process the button
                     TransformOp.scaleInPlace(shapes.get(0), convertToPoint(scale_amt_x, scale_amt_y, scale_amt_z));
                     renderScene();
+                    curAction.setText("Scaled Shape");
                     //   fixedPoint.setText(graph.fixedPoint[0] +"," + graph.fixedPoint[1] +","+graph.fixedPoint[2]);
                     // -- and return focus back to the pane
                     pane.requestFocus();
@@ -399,6 +409,7 @@ public class GraphicsJavaFX extends Application
                     {
                         d = 0.0;
                     }
+                    curAction.setText("Rotated Shape");
                     TransformOp.rotateArb(shapes.get(0), convertToPoint(degree_amt_x, degree_amt_y, degree_amt_z),d);
                     renderScene();
                     // -- and return focus back to the pane
@@ -415,6 +426,7 @@ public class GraphicsJavaFX extends Application
                     // -- process the button
                     shapes = new ArrayList<>();
                     renderScene();
+                    curAction.setText("Cleared");
                     // -- and return focus back to the pane
                     pane.requestFocus();
                 }
@@ -436,6 +448,7 @@ public class GraphicsJavaFX extends Application
                             e.printStackTrace();
                         }
                     }
+                    curAction.setText("Saved Image");
                     // -- and return focus back to the pane
                     pane.requestFocus();
                 }
